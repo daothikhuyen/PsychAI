@@ -1,0 +1,12 @@
+# Django & REST framework
+django
+djangorestframework
+
+# Firebase
+firebase-admin
+
+# Machine Learning / Deep Learning
+tensorflow
+numpy
+mediapipe
+opencv-python

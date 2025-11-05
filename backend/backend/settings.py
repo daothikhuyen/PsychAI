@@ -12,7 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import firebase_admin
-from firebase_admin import credentials, firestore, auth
+from firebase_admin import credentials, firestore
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +29,9 @@ SECRET_KEY = 'django-insecure-%#50eajbkow020b@ogc-$prvih&m7et0^pryvy%grl+w451#c$
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+# remove / in end for api
+APPEND_SLASH = False
 
 
 # Application definition
@@ -127,6 +131,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # firebase 
 
+FIREBASE_API_KEY = config('FIREBASE_API_KEY')
 FIREBASE_CRED_PATH = BASE_DIR / "firebase_key.json"
 cred = credentials.Certificate(str(FIREBASE_CRED_PATH))
 if not firebase_admin._apps:
