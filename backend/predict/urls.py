@@ -1,6 +1,7 @@
-from django.urls import path
-from . import views
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet
 
-urlpatterns = [
-    path('predict', views.predict, name='predict'),
-]
+router = DefaultRouter(trailing_slash=False)
+router.register('', UserViewSet,'predict')
+
+urlpatterns = router.urls
