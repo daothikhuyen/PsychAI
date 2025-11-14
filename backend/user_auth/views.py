@@ -10,12 +10,12 @@ db = firestore.client()
 
 class UserViewSet(viewsets.ViewSet):
 
-    def check_user_exists(self, email):
+    def check_user_exists(self, user_id):
         try:
-            user = auth.get_user_by_email(email)
-            return True
+            user = auth.get_user(user_id)
+            return user
         except auth.UserNotFoundError:
-            return False
+            return Response({"error": "Bạn chưa đăng nhập"}, status=status.HTTP_401_UNAUTHORIZED)
         
     def _create_firestore_user(seft, uid, username, email):
         user_info = {
@@ -84,7 +84,7 @@ class UserViewSet(viewsets.ViewSet):
 
         try:
             if self.check_user_exists(email):
-                return Response({"message": "Account already exists"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"message": "Tài khoản đã tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
 
             user_record = auth.create_user(
                 email = email,
@@ -94,7 +94,7 @@ class UserViewSet(viewsets.ViewSet):
 
             self._create_firestore_user(user_record.uid, username, email)
 
-            return Response({"message": "Create User success"}, status=status.HTTP_200_OK)
+            return Response({"message": "Tạo người dùng thành công"}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -106,7 +106,7 @@ class UserViewSet(viewsets.ViewSet):
         password = data.get('password', None)
 
         if not email or not password:
-            return Response({"message": "Email and password cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Email và mật khẩu không được để trống"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             user_info = self._firebase_signin(email, password)
@@ -118,7 +118,7 @@ class UserViewSet(viewsets.ViewSet):
     def google_signin(self,request):
         id_token = request.data.get("id_token")
         if not id_token:
-            return Response({"error": "id_token required"}, status=400)
+            return Response({"error": "Cần có id_token"}, status=400)
 
         try:
             decoded_token = auth.verify_id_token(id_token)
@@ -130,4 +130,4 @@ class UserViewSet(viewsets.ViewSet):
 
             return Response({"user": user_info}, status= status.HTTP_200_OK)
         except Exception as e:
-            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)  
+            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)   
