@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -14,9 +16,9 @@ class SignUpScreen extends StatelessWidget {
           icon: const Icon(
             Icons.arrow_back,
             color: Color(0xFF0A4F6A),
-            size: 38,
+            size: 28,
           ),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       extendBodyBehindAppBar: true,
@@ -130,7 +132,6 @@ class _SignUpContentState extends State<SignUpContent> {
                     color: const Color.fromARGB(255, 255, 255, 255),
                   ),
                   onPressed: () {
-                    // Cập nhật trạng thái để build lại UI
                     setState(() {
                       _isPasswordVisible = !_isPasswordVisible;
                     });
@@ -147,11 +148,7 @@ class _SignUpContentState extends State<SignUpContent> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(
-                    //viền
-                    color: Colors.white,
-                    width: 2,
-                  ),
+                  side: const BorderSide(color: Colors.white, width: 2),
                 ),
                 elevation: 0,
               ),
@@ -166,23 +163,25 @@ class _SignUpContentState extends State<SignUpContent> {
             ),
             const SizedBox(height: 20),
 
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Bạn đã có tài khoản? ',
-                  // ignore: lines_longer_than_80_chars
                   style: TextStyle(
                     color: Color.fromRGBO(252, 252, 252, 1),
                     fontSize: 16,
                   ),
                 ),
-                Text(
-                  'Đăng nhập',
-                  style: TextStyle(
-                    color: Color(0xFFEC9D53),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                GestureDetector(
+                  onTap: ()=> context.push(PageRoutes.signIn),
+                  child: const Text(
+                    'Đăng nhập',
+                    style: TextStyle(
+                      color: Color(0xFFEC9D53),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
                   ),
                 ),
               ],
@@ -199,8 +198,8 @@ class _SignUpContentState extends State<SignUpContent> {
                 children: [
                   TextSpan(
                     text:
-                        // ignore: lines_longer_than_80_chars
-                        'Bằng cách tiếp tục, bạn cho biết rằng bạn đã đọc và đồng ý với ',
+                        'Bằng cách tiếp tục, bạn cho biết'
+                        ' rằng bạn đã đọc và đồng ý với ',
                   ),
                   TextSpan(
                     text: 'Điều khoản dịch vụ',
@@ -264,7 +263,10 @@ class _SignUpContentState extends State<SignUpContent> {
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(30),
         // ignore: lines_longer_than_80_chars
-        borderSide: const BorderSide(color: Color.fromARGB(255, 176, 217, 230), width: 5),
+        borderSide: const BorderSide(
+          color: Color.fromARGB(255, 176, 217, 230),
+          width: 5,
+        ),
       ),
     );
   }
