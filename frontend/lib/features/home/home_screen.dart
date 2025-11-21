@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/controller/auth_controller.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 💡 Thêm Scaffold vào màn hình con
+   final authController = context.watch<AuthController>();
+    final user = authController.currentUser;
+
     return Scaffold( 
       appBar: AppBar(
         title: const Text('Trang Chủ'), // Thêm AppBar vào đây!
       ),
-      body: const Center(
+      body: Center(
         child: Text(
-          'Đây là nội dung của Home Screen',
-          style: TextStyle(fontSize: 20),
+          user?.displayName??'',
+          style: const TextStyle(fontSize: 20),
         ),
       ),
     );

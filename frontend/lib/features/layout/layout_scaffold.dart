@@ -16,8 +16,9 @@ class LayoutScaffold extends StatefulWidget {
 class _LayoutScaffoldState extends State<LayoutScaffold> {
   final List<Destination> destinations = [
     Destination(id: 'home', icon: 'Icons.home', labelKey: 'Trang chủ'),
-    Destination(id: 'profile', icon: 'Icons.home', labelKey: 'Hồ sơ'),
-    Destination(id: 'settings', icon: 'Icons.home', labelKey: 'Cài đặt'),
+    Destination(id: 'chat', icon: 'Icons.home', labelKey: 'chat'),
+    Destination(id: 'news', icon: 'Icons.home', labelKey: 'Tin tức'),
+    Destination(id: 'profile', icon: 'Icons.home', labelKey: 'Cài đặt'),
   ];
 
   @override

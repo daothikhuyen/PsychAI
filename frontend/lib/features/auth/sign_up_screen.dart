@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/themes/app_colors.dart';
+import 'package:frontend/core/widgets/textfield.dart';
+import 'package:frontend/features/auth/controller/auth_controller.dart';
+import 'package:frontend/features/auth/utils/validators.dart';
+import 'package:frontend/features/auth/widget/check_list.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -9,6 +15,7 @@ class SignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -18,19 +25,16 @@ class SignUpScreen extends StatelessWidget {
             color: Color(0xFF0A4F6A),
             size: 28,
           ),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.go(PageRoutes.auth),
         ),
       ),
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          Positioned.fill(
-            child: Image.asset(
-              'assets/images/bg5.png',
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Image.asset('assets/images/bg5.png', fit: BoxFit.cover),
           ),
           const SignUpContent(),
         ],
@@ -39,233 +43,193 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class SignUpContent extends StatefulWidget {
+class SignUpContent extends StatelessWidget {
   const SignUpContent({super.key});
 
   @override
-  State<SignUpContent> createState() => _SignUpContentState();
-}
-
-class _SignUpContentState extends State<SignUpContent> {
-  bool _isPasswordVisible = false;
-  static const Color primaryTextColor = Color(0xFF0A4F6A);
-  static const Color borderColor = Color(0xFFB0D9E6);
-  static const Color buttonColor = Color(0xFFB0D9E6);
-
-  @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
+
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 10, 24, 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Text(
-              'Đăng Ký',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color.fromARGB(255, 16, 95, 133),
-                fontSize: 34,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Text(
-                  'Mind Keep',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 42,
-                    fontWeight: FontWeight.bold,
-                    foreground:
-                        Paint()
-                          ..style = PaintingStyle.stroke
-                          ..strokeWidth = 5
-                          ..color = const Color(0xFFF38B61),
-                  ),
-                ),
-
-                const Text(
-                  'Mind Keep',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 42,
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 203, 226, 247),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-
-            TextField(
-              decoration: _buildInputDecoration(
-                hint: 'Tên',
-                prefixIcon: Icons.person_outlined,
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 30),
-
-            TextField(
-              decoration: _buildInputDecoration(
-                hint: 'Email',
-                prefixIcon: Icons.email_outlined,
-              ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 28),
-
-            TextField(
-              obscureText: !_isPasswordVisible, // Ẩn/hiện mật khẩu
-              decoration: _buildInputDecoration(
-                hint: 'Mật khẩu',
-                prefixIcon: Icons.lock_outline,
-                suffixIcon: IconButton(
-                  icon: Icon(
-                    _isPasswordVisible
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
-                    color: const Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      _isPasswordVisible = !_isPasswordVisible;
-                    });
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 30),
-
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: buttonColor,
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                  side: const BorderSide(color: Colors.white, width: 2),
-                ),
-                elevation: 0,
-              ),
-              child: const Text(
-                'Tiếp tục',
-                style: TextStyle(
-                  color: primaryTextColor,
-                  fontSize: 24,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.fromLTRB(24, 10, 24, 10),
+        child: SingleChildScrollView(
+          child: Form(
+            key: authController.formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'Bạn đã có tài khoản? ',
+                  'Đăng Ký',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Color.fromRGBO(252, 252, 252, 1),
-                    fontSize: 16,
+                    color: Color.fromARGB(255, 16, 95, 133),
+                    fontSize: 34,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-                GestureDetector(
-                  onTap: ()=> context.push(PageRoutes.signIn),
+                const SizedBox(height: 10),
+
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Text(
+                      'Mind Keep',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        foreground:
+                            Paint()
+                              ..style = PaintingStyle.stroke
+                              ..strokeWidth = 5
+                              ..color = const Color(0xFFF38B61),
+                      ),
+                    ),
+
+                    const Text(
+                      'Mind Keep',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 203, 226, 247),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                PredictTextField(
+                  controller: authController.name,
+                  hint: 'Tên',
+                  validator:
+                      (v) => validateText(
+                        context,
+                        v,
+                        'Không được để trống tên người dùng',
+                      ),
+                  prefixIcon: Icons.person_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+
+                const SizedBox(height: 30),
+
+                PredictTextField(
+                  controller: authController.email,
+                  hint: 'Email',
+                  validator: (v) => validateEmail(context, v),
+                  prefixIcon: Icons.email_outlined,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+
+                const SizedBox(height: 28),
+                PredictTextField(
+                  controller: authController.password,
+                  obscureText: !authController.isPasswordVisible,
+                  hint: 'Mật khẩu',
+                  validator: (v) => validatePassword(context, v),
+                  focusNode: authController.passwordFocusNode,
+                  prefixIcon: Icons.lock_outline,
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      !authController.isPasswordVisible
+                          ? Icons.visibility_off_outlined
+                          : Icons.visibility_outlined,
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                    ),
+                    onPressed: authController.togglePassword,
+                  ),
+                ),
+                if (authController.showPasswordChecklist)
+                  PasswordRequirementChecklist(
+                    password: authController.password.text,
+                  ),
+                const SizedBox(height: 30),
+
+                ElevatedButton(
+                  onPressed: () => authController.signUp(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary300,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: const BorderSide(color: Colors.white, width: 2),
+                    ),
+                    elevation: 0,
+                  ),
                   child: const Text(
-                    'Đăng nhập',
+                    'Đăng Ký',
                     style: TextStyle(
-                      color: Color(0xFFEC9D53),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      color: AppColors.primary800,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
+                ),
+                const SizedBox(height: 30),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      'Bạn đã có tài khoản? ',
+                      style: TextStyle(
+                        color: Color.fromRGBO(252, 252, 252, 1),
+                        fontSize: 16,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () => context.go(PageRoutes.signIn),
+                      child: const Text(
+                        'Đăng nhập',
+                        style: TextStyle(
+                          color: Color(0xFFEC9D53),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+
+                const Text.rich(
+                  TextSpan(
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 236, 234, 234),
+                      fontSize: 18,
+                      height: 1.5,
+                    ),
+                    children: [
+                      TextSpan(
+                        text:
+                            'Bằng cách tiếp tục, bạn cho biết'
+                            ' rằng bạn đã đọc và đồng ý với ',
+                      ),
+                      TextSpan(
+                        text: 'Điều khoản dịch vụ',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(text: ' và '),
+                      TextSpan(
+                        text: 'Chính sách bảo mật',
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(text: ' của chúng tôi'),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),
-            const SizedBox(height: 40),
-
-            const Text.rich(
-              TextSpan(
-                style: TextStyle(
-                  color: Color.fromARGB(255, 236, 234, 234),
-                  fontSize: 18,
-                  height: 1.5,
-                ),
-                children: [
-                  TextSpan(
-                    text:
-                        'Bằng cách tiếp tục, bạn cho biết'
-                        ' rằng bạn đã đọc và đồng ý với ',
-                  ),
-                  TextSpan(
-                    text: 'Điều khoản dịch vụ',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(text: ' và '),
-                  TextSpan(
-                    text: 'Chính sách bảo mật',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(text: ' của chúng tôi'),
-                ],
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
-    );
-  }
-
-  InputDecoration _buildInputDecoration({
-    required String hint,
-    required IconData prefixIcon,
-    Widget? suffixIcon,
-  }) {
-    return InputDecoration(
-      hintText: hint,
-      // ignore: lines_longer_than_80_chars
-      hintStyle: const TextStyle(
-        color: Color.fromARGB(255, 255, 255, 255),
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-      ),
-      // ignore: lines_longer_than_80_chars
-      prefixIcon: Icon(
-        prefixIcon,
-        color: const Color.fromARGB(255, 255, 255, 255),
-        size: 26,
-      ),
-      suffixIcon: suffixIcon,
-      filled: true,
-      // ignore: deprecated_member_use
-      fillColor: Colors.white.withOpacity(0),
-      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 25),
-      border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: borderColor, width: 1.5),
-      ),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Color.fromARGB(255, 253, 253, 253)),
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        // ignore: lines_longer_than_80_chars
-        borderSide: const BorderSide(
-          color: Color.fromARGB(255, 176, 217, 230),
-          width: 5,
+          ),
         ),
       ),
     );

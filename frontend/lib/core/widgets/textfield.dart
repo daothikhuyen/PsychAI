@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/themes/app_colors.dart';
 
 class PredictTextField extends StatelessWidget {
   const PredictTextField({
     required this.hint,
     required this.prefixIcon,
+    this.focusNode,
     super.key,
     this.suffixIcon,
     this.keyboardType = TextInputType.text,
     this.obscureText = false,
+    this.validator,
     this.controller,
   });
   final String hint;
@@ -15,7 +18,9 @@ class PredictTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputType keyboardType;
   final bool obscureText;
+  final String? Function(String?)? validator;
   final TextEditingController? controller;
+  final FocusNode? focusNode;
 
   InputDecoration _buildDecoration() {
     return InputDecoration(
@@ -52,13 +57,22 @@ class PredictTextField extends StatelessWidget {
           width: 5,
         ),
       ),
+
+      errorStyle: const TextStyle(
+        color: AppColors.error200,
+        fontSize: 16,
+        fontWeight: FontWeight.w500,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      validator: validator,
+      focusNode: focusNode,
       keyboardType: keyboardType,
       obscureText: obscureText,
       decoration: _buildDecoration(),

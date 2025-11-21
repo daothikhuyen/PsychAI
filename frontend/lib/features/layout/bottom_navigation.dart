@@ -48,10 +48,10 @@ class BottomNavigation extends StatelessWidget {
           onDestinationSelected: widget.navigationShell.goBranch,
           destinations:
               destination.map((e) {
-                return const NavigationDestination(
-                  icon: Icon(Icons.home_outlined),
-                  selectedIcon: Icon(Icons.home),
-                  label: 'Home',
+                return NavigationDestination(
+                  icon: const Icon(Icons.home_outlined),
+                  selectedIcon: const Icon(Icons.home),
+                  label: e.labelKey,
                 );
               }).toList(),
         ),

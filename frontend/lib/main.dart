@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/theme.dart';
 import 'package:frontend/routing/routes.dart';
+import 'package:provider/provider.dart';
 
-
-
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+    await authController.isLoginIn();
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => authController),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

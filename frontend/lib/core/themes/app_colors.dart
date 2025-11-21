@@ -2,13 +2,13 @@ import 'dart:ui';
 
 class AppColors {
   // Color light
-  static const Color primaryLight = Color(0xFF2853af);
-  static const Color primary300 = Color(0xFF99CDF7);
-  static const Color primary400 = Color(0xFF69B1F1);
+  static const Color primaryLight = Color(0xFF0A4F6A);
+  static const Color primary300 = Color(0xFFB0D9E6);
+  static const Color primary400 = Color(0xFFCEFFFF);
   static const Color primary500 = Color(0xFF4593EC);
   static const Color primary600 = Color(0xFF3076E0);
   static const Color primary700 = Color(0xFF2761CE);
-  static const Color primary800 = Color(0xFF2853af);
+  static const Color primary800 = Color(0xFF0A4F6A);
 
   static const Color secondary50 = Color(0xFFE8F2FF);
   static const Color secondary100 = Color(0xFFDBEAFE);
