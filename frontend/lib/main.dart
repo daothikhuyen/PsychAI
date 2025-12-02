@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/auth/widget/sign_in_screen.dart';
-
+import 'package:frontend/features/home/main_screen.dart';
+import 'package:frontend/features/home/test_conclusion_screen.dart';
 
 
 void main() {
@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const SignInScreen(),
+      home: const HomeMainScreen(),
     );
   }
 }
