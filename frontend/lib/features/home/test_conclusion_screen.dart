@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
 import 'package:frontend/core/models/test_result_model.dart';
-// import 'package:frontend/features/home/main_screen.dart'; 
+import 'package:frontend/core/themes/app_colors.dart';
+// import 'package:frontend/features/home/main_screen.dart';
 
 class TestConclusionScreen extends StatelessWidget {
-  const TestConclusionScreen({
-    super.key,
-    // ignore: always_put_required_named_parameters_first
-    required this.result,
-  });
+  const TestConclusionScreen({required this.result, super.key});
 
   final TestResult result;
 
   void _returnToHome(BuildContext context) {
     Navigator.popUntil(context, (route) => route.isFirst);
     if (Navigator.canPop(context)) {
-      Navigator.pop(context, true); 
+      Navigator.pop(context, true);
     }
   }
 
@@ -23,18 +20,23 @@ class TestConclusionScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
-        label, style: const TextStyle(
-          fontSize: 20, 
-          fontWeight: FontWeight.normal)),
+        label,
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.normal),
+      ),
     );
   }
 
   Widget _buildScoreValue(int score) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
-      child: Text('$score', 
-      style: const TextStyle(
-        fontSize: 20, fontWeight: FontWeight.bold, color: primaryColor)),
+      child: Text(
+        '$score',
+        style: const TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: primaryColor,
+        ),
+      ),
     );
   }
 
@@ -94,18 +96,20 @@ class TestConclusionScreen extends StatelessWidget {
                     const Text(
                       'Cảm xúc dự đoán:',
                       style: TextStyle(
-                        fontSize: 22, 
-                        fontWeight: FontWeight.bold),
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(width: 10),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start, 
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
                           result.predictedEmotion,
                           style: const TextStyle(
-                            fontSize: 20, 
-                            fontWeight: FontWeight.normal),
+                            fontSize: 20,
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                         const SizedBox(height: 20),
                       ],
@@ -122,24 +126,31 @@ class TestConclusionScreen extends StatelessWidget {
                 Table(
                   columnWidths: const {
                     0: IntrinsicColumnWidth(),
-                     1: FixedColumnWidth(10), 
-                     2: FlexColumnWidth()},
+                    1: FixedColumnWidth(10),
+                    2: FlexColumnWidth(),
+                  },
                   children: <TableRow>[
-                    TableRow(children: [
-                      _buildScoreLabel('Trầm cảm:'),
-                      const SizedBox(),
-                      _buildScoreValue(result.depressionScore),
-                    ]),
-                    TableRow(children: [
-                      _buildScoreLabel('Lo lắng:'),
-                      const SizedBox(),
-                      _buildScoreValue(result.anxietyScore),
-                    ]),
-                    TableRow(children: [
-                      _buildScoreLabel('Căng thẳng:'),
-                      const SizedBox(),
-                      _buildScoreValue(result.stressScore),
-                    ]),
+                    TableRow(
+                      children: [
+                        _buildScoreLabel('Trầm cảm:'),
+                        const SizedBox(),
+                        _buildScoreValue(result.depressionScore),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        _buildScoreLabel('Lo lắng:'),
+                        const SizedBox(),
+                        _buildScoreValue(result.anxietyScore),
+                      ],
+                    ),
+                    TableRow(
+                      children: [
+                        _buildScoreLabel('Căng thẳng:'),
+                        const SizedBox(),
+                        _buildScoreValue(result.stressScore),
+                      ],
+                    ),
                   ],
                 ),
                 const SizedBox(height: 22),
@@ -157,25 +168,24 @@ class TestConclusionScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 22),
 
-                Align( 
+                Align(
                   alignment: Alignment.centerRight,
                   child: InkWell(
-                    onTap: () => _returnToHome(context), 
+                    onTap: () => _returnToHome(context),
                     child: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                       child: Text(
                         'Trang chủ -->',
                         style: TextStyle(
-                          fontSize: 22, 
+                          fontSize: 22,
                           fontStyle: FontStyle.italic,
-                          color: primaryColor, 
+                          color: primaryColor,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
                   ),
                 ),
-                
 
                 const Text(
                   'Thông tin liên lạc',
@@ -188,20 +198,28 @@ class TestConclusionScreen extends StatelessWidget {
                     backgroundImage: AssetImage('assets/images/doctor.jpg'),
                   ),
                   title: const Text(
-                    'Bác sĩ Kim', 
+                    'Bác sĩ Kim',
                     style: TextStyle(
-                      color: Colors.black87, 
-                      fontWeight: FontWeight.bold, 
-                      fontSize: 20)),
-                  subtitle: const Text('0988 776655', style: TextStyle(
-                    color: Colors.black87, 
-                    fontWeight: FontWeight.normal, 
-                    fontSize: 20)),
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  subtitle: const Text(
+                    '0988 776655',
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 20,
+                    ),
+                  ),
                   trailing: IconButton(
                     onPressed: () {},
                     icon: const Icon(
-                      Icons.phone_android, 
-                      color: Colors.black54, size: 28),
+                      Icons.phone_android,
+                      color: Colors.black54,
+                      size: 28,
+                    ),
                   ),
                 ),
               ],
@@ -218,67 +236,84 @@ class HomeMainScreen extends StatelessWidget {
 
   // ignore: avoid_field_initializers_in_const_classes
   final List<Map<String, dynamic>> testResults = const [
-    {'id': 1, 'date': '16-08-2025', 'emotion': 'Ngạc nhiên', 'emotionEmoji': '😍'},
+    {
+      'id': 1,
+      'date': '16-08-2025',
+      'emotion': 'Ngạc nhiên',
+      'emotionEmoji': '😍',
+    },
     // ignore: lines_longer_than_80_chars
-    {'id': 2, 'date': '20-08-2025', 'emotion': 'Tức giận', 'emotionEmoji': '😭'},
+    {
+      'id': 2,
+      'date': '20-08-2025',
+      'emotion': 'Tức giận',
+      'emotionEmoji': '😭',
+    },
     {'id': 3, 'date': '28-08-2025', 'emotion': 'Buồn', 'emotionEmoji': '😔'},
   ];
-  
+
   Widget _buildWelcomeBanner() {
     return Container(
-            padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-            decoration: BoxDecoration(
-              color: infoCardColor,
-              borderRadius: BorderRadius.circular(20),
-             ),
-            child: Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Image.asset(
-                    'assets/images/heart_1.png',
-                    // color: PrimaryColor,
-                    width: 30,
-                    height: 30,
-                  ),
-                ),
-                const SizedBox(width: 15),
-
-                const Expanded(
-                  child: Text(
-                    // ignore: lines_longer_than_80_chars
-                    'Chúng tôi ở đây,để lắng nghe trái tim bạn',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-              ], 
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
+      decoration: BoxDecoration(
+        color: AppColors.greyscale100,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            child: Image.asset(
+              'assets/images/heart_1.png',
+              // color: PrimaryColor,
+              width: 30,
+              height: 30,
             ),
+          ),
+          const SizedBox(width: 15),
+
+          const Expanded(
+            child: Text(
+              // ignore: lines_longer_than_80_chars
+              'Chúng tôi ở đây,để lắng nghe trái tim bạn',
+              style: TextStyle(
+                color: Color.fromARGB(255, 0, 0, 0),
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+          const SizedBox(height: 30),
+        ],
+      ),
     );
   }
 
   Color _getEmojiColor(String emoji) {
-  switch (emoji) {
-    // ignore: deprecated_member_use
-    case '😍': return Colors.green.shade400.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    case '😭': return Colors.red.shade400.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    case '😔': return Colors.grey.shade500.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    case '😊': return Colors.pink.shade400.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    case '👍': return Colors.orange.shade400.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    case '😡': return Colors.deepPurple.shade400.withOpacity(0.8);
-    // ignore: deprecated_member_use
-    default: return Colors.blue.shade400.withOpacity(0.8);
+    switch (emoji) {
+      // ignore: deprecated_member_use
+      case '😍':
+        return Colors.green.shade400.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      case '😭':
+        return Colors.red.shade400.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      case '😔':
+        return Colors.grey.shade500.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      case '😊':
+        return Colors.pink.shade400.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      case '👍':
+        return Colors.orange.shade400.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      case '😡':
+        return Colors.deepPurple.shade400.withOpacity(0.8);
+      // ignore: deprecated_member_use
+      default:
+        return Colors.blue.shade400.withOpacity(0.8);
+    }
   }
-}
 
   Widget _buildResultCard(BuildContext context, Map<String, dynamic> result) {
     return Card(
@@ -297,7 +332,9 @@ class HomeMainScreen extends StatelessWidget {
             context,
             MaterialPageRoute(
               // ignore: lines_longer_than_80_chars
-              builder: (context) => TestResultDetailScreen(testIndex: result['id'] as int),
+              builder:
+                  (context) =>
+                      TestResultDetailScreen(testIndex: result['id'] as int),
             ),
           );
         },
@@ -309,14 +346,16 @@ class HomeMainScreen extends StatelessWidget {
               CircleAvatar(
                 radius: 25,
                 // ignore: lines_longer_than_80_chars
-                backgroundColor: _getEmojiColor(result['emotionEmoji'] as String),
+                backgroundColor: _getEmojiColor(
+                  result['emotionEmoji'] as String,
+                ),
                 child: Text(
                   result['emotionEmoji'] as String,
                   style: const TextStyle(fontSize: 28),
                 ),
               ),
               const SizedBox(width: 16),
-              
+
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +379,7 @@ class HomeMainScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               Text(
                 result['date'] as String,
                 style: TextStyle(
@@ -356,11 +395,10 @@ class HomeMainScreen extends StatelessWidget {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),     
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 20, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -368,19 +406,19 @@ class HomeMainScreen extends StatelessWidget {
           const SizedBox(height: 20),
 
           const Text(
-            'Các bài kiểm tra', 
+            'Các bài kiểm tra',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF3B5B84), 
+              color: Color(0xFF3B5B84),
             ),
           ),
           const SizedBox(height: 15),
-        
+
           ...testResults.map((result) {
             return _buildResultCard(context, result);
           }),
-          
+
           // const Divider(height: 40, thickness: 1),
 
           // const Text(
@@ -394,18 +432,16 @@ class HomeMainScreen extends StatelessWidget {
           // const SizedBox(height: 15),
 
           // _buildTestItem(
-          //   context, 'Bài kiểm tra Zung', 'Chưa thực hiện', 
+          //   context, 'Bài kiểm tra Zung', 'Chưa thực hiện',
           //   Icons.assignment_outlined),
-          // _buildTestItem(context, 'Bài kiểm tra Beck', 'Chưa thực hiện', 
+          // _buildTestItem(context, 'Bài kiểm tra Beck', 'Chưa thực hiện',
           // Icons.psychology_outlined),
-  
           const SizedBox(height: 50),
         ],
       ),
     );
   }
 }
-
 
 // =================================================================
 // 3. TEST RESULT DETAIL SCREEN (Chi tiết lịch sử)
@@ -415,13 +451,13 @@ class HomeMainScreen extends StatelessWidget {
 
 class TestResultDetailScreen extends StatelessWidget {
   final int testIndex;
-  
+
   // ignore: sort_constructors_first
   const TestResultDetailScreen({
     super.key,
     // ignore: always_put_required_named_parameters_first
     required this.testIndex,
-  }); 
+  });
 
   // Dữ liệu mock nội bộ (Giả định cho các lần test 1, 2, 3...)
   // ignore: avoid_field_initializers_in_const_classes
@@ -432,12 +468,13 @@ class TestResultDetailScreen extends StatelessWidget {
       'predictedEmotion': 'Ngạc nhiên',
       'date': '16-08-2025',
       'totalPhotos': 5,
-      'emotionBreakdown':  ' 3 Ngạc nhiên,\n 1 Vui vẻ,\n 1 Bình thường',
+      'emotionBreakdown': ' 3 Ngạc nhiên,\n 1 Vui vẻ,\n 1 Bình thường',
       'depressionScore': 6,
       'anxietyScore': 4,
       'stressScore': 6,
       // ignore: lines_longer_than_80_chars
-      'conclusion': 'Cảm xúc của bạn hiện chưa tốt lắm, nên theo dõi thêm về cảm xúc và giấc ngủ.',
+      'conclusion':
+          'Cảm xúc của bạn hiện chưa tốt lắm, nên theo dõi thêm về cảm xúc và giấc ngủ.',
     },
     // Lần 2
     {
@@ -450,7 +487,8 @@ class TestResultDetailScreen extends StatelessWidget {
       'anxietyScore': 16,
       'stressScore': 30,
       // ignore: lines_longer_than_80_chars
-      'conclusion': 'Kết quả cho thấy mức độ rối loạn nặng. Bạn nên tham khảo ý kiến chuyên gia.',
+      'conclusion':
+          'Kết quả cho thấy mức độ rối loạn nặng. Bạn nên tham khảo ý kiến chuyên gia.',
     },
     // Lần 3
     {
@@ -463,18 +501,20 @@ class TestResultDetailScreen extends StatelessWidget {
       'anxietyScore': 10,
       'stressScore': 20,
       // ignore: lines_longer_than_80_chars
-      'conclusion': 'Mức độ rối loạn ở mức vừa phải. Cân nhắc tìm kiếm sự hỗ trợ.',
+      'conclusion':
+          'Mức độ rối loạn ở mức vừa phải. Cân nhắc tìm kiếm sự hỗ trợ.',
     },
   ];
 
   Map<String, dynamic> get _result {
-    final data = (testIndex > 0 && testIndex <= mockDetailData.length)
-        ? mockDetailData[testIndex - 1]
-        : mockDetailData[0]; 
+    final data =
+        (testIndex > 0 && testIndex <= mockDetailData.length)
+            ? mockDetailData[testIndex - 1]
+            : mockDetailData[0];
 
     return data;
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final result = _result;
@@ -512,7 +552,7 @@ class TestResultDetailScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Colors.white,
-      
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -534,8 +574,9 @@ class TestResultDetailScreen extends StatelessWidget {
                   Text(
                     'Cảm xúc dự đoán: ${result['predictedEmotion']}',
                     style: const TextStyle(
-                      fontSize: 20, 
-                      fontWeight: FontWeight.bold),
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   Text(
@@ -545,33 +586,33 @@ class TestResultDetailScreen extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 30),
-            
+
             // 2. PHÂN TÍCH ẢNH
             _buildSectionTitle('Phân tích hình ảnh:'),
             const SizedBox(height: 15),
-            
+
             _buildDetailRow(
-              context, 
-              'Tổng số ảnh:', 
-              ' ${result['totalPhotos']} ảnh'
+              context,
+              'Tổng số ảnh:',
+              ' ${result['totalPhotos']} ảnh',
             ),
             _buildDetailRow(
-              context, 
-              'Tổng số cảm xúc:', 
-              result['emotionBreakdown'] as String
+              context,
+              'Tổng số cảm xúc:',
+              result['emotionBreakdown'] as String,
             ),
-            
+
             const Divider(height: 30, thickness: 1),
-            
+
             _buildSectionTitle('Số điểm qua bài kiểm tra Dass-21:'),
             const SizedBox(height: 15),
-            
+
             Table(
               columnWidths: const {
                 // ignore: avoid_redundant_argument_values
-                0: FlexColumnWidth(1), 
+                0: FlexColumnWidth(1),
                 1: FixedColumnWidth(10),
                 // ignore: avoid_redundant_argument_values
                 2: FlexColumnWidth(1),
@@ -582,13 +623,13 @@ class TestResultDetailScreen extends StatelessWidget {
                 _buildScoreRow('Căng thẳng:', result['stressScore'] as int),
               ],
             ),
-            
+
             const Divider(height: 30, thickness: 1),
-            
+
             // 4. KẾT LUẬN CUỐI CÙNG
             _buildSectionTitle('Kết luận:'),
             const SizedBox(height: 10),
-            
+
             Text(
               result['conclusion'] as String,
               textAlign: TextAlign.center,
@@ -596,7 +637,7 @@ class TestResultDetailScreen extends StatelessWidget {
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
                 color: Color.fromARGB(255, 8, 174, 41),
-                height: 1.5,   
+                height: 1.5,
               ),
             ),
             const SizedBox(height: 40),
@@ -622,16 +663,22 @@ class TestResultDetailScreen extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Text(label, style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w500, 
-            color: Color.fromARGB(255, 0, 0, 0))),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w500,
+              color: Color.fromARGB(255, 0, 0, 0),
+            ),
+          ),
         ),
         const SizedBox(),
         Padding(
           padding: const EdgeInsets.only(bottom: 8),
-          child: Text('$score', style: const TextStyle(
-            fontSize: 18, fontWeight: FontWeight.w500)),
+          child: Text(
+            '$score',
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+          ),
         ),
       ],
     );
@@ -644,7 +691,7 @@ class TestResultDetailScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            width: 150, 
+            width: 150,
             child: Text(
               label,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),

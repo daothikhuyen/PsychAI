@@ -81,7 +81,6 @@ class AuthController extends ChangeNotifier {
       if (response['user'] != null) {
         final user = PsychUser.fromJson(response['user']);
         await LocalStorageHelper.saveUser(user);
-        print('User loaded from local storage: $user');
         setUser(user);
       }
 

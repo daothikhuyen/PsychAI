@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class Destination {
   Destination({required this.id, required this.icon, required this.labelKey});
 
@@ -6,6 +8,6 @@ class Destination {
   }
 
   String id;
-  String icon;
+  IconData icon;
   String labelKey;
 }
