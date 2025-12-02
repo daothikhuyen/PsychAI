@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'predict',
     'user_auth',
+    'psych_test',
+    'articles',
+    'topic',
+    'collector'
 ]
 
 MIDDLEWARE = [

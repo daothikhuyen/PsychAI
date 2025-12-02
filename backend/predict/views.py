@@ -13,6 +13,7 @@ from datetime import datetime
 from collections import defaultdict
 from backend.utils.firestore_utils import serialize_doc
 from user_auth.views import UserViewSet
+from rest_framework.permissions import IsAuthenticated
 
 db = firestore.client()
 
@@ -25,6 +26,7 @@ mp_face_detection = mp.solutions.face_detection
 
 class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
     authentication_classes = [FirebaseAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_final_emotion(self, prediction_id):
         try:
@@ -163,7 +165,7 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
         try:
             doc_ref = db.collection('predictions').document(pk).get()
             if not doc_ref.exists:
-                return Response({"error": "Dữ liệu không có"}, status=404)
+                return Response({"error": "Dữ liệu không có"}, status=status.HTTP_400_BAD_REQUEST)
             
             return  Response({"result" : serialize_doc(doc_ref)}, status=status.HTTP_200_OK) 
         except Exception as e:
