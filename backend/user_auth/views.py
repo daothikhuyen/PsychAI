@@ -3,19 +3,28 @@ from rest_framework.decorators import action
 from .serializers import UserSerializers
 from rest_framework.response import Response
 from firebase_admin import firestore, auth
+from django.contrib.auth import get_user_model
 from django.conf import settings
 import requests
 
 db = firestore.client()
 
 class UserViewSet(viewsets.ViewSet):
+    User = get_user_model()
 
-    def check_user_exists(self, user_id):
+    def get_user_by_firebase(self, user_id):
         try:
             user = auth.get_user(user_id)
             return user
         except auth.UserNotFoundError:
-            return Response({"error": "Bạn chưa đăng nhập"}, status=status.HTTP_401_UNAUTHORIZED)
+            return None
+        
+    def check_user_exists(self, email):
+        try:
+            user = auth.get_user_by_email(email)
+            return user
+        except auth.UserNotFoundError:
+            return None
         
     def _create_firestore_user(seft, uid, username, email):
         user_info = {
@@ -83,6 +92,7 @@ class UserViewSet(viewsets.ViewSet):
         password = data['password']
 
         try:
+            print('email: ', email)
             if self.check_user_exists(email):
                 return Response({"message": "Tài khoản đã tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -112,7 +122,7 @@ class UserViewSet(viewsets.ViewSet):
             user_info = self._firebase_signin(email, password)
             return Response({"user": user_info}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"message": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"message": 'Email hoặc mật khẩu không đúng'}, status=status.HTTP_401_UNAUTHORIZED)
         
     @action(detail= False, methods=['post'])    
     def google_signin(self,request):

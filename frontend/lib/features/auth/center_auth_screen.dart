@@ -1,5 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:frontend/features/auth/widget/primary_button.dart';
+import 'package:frontend/features/auth/widget/social_button.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CenterAuthScreen extends StatelessWidget {
   const CenterAuthScreen({super.key});
@@ -61,8 +65,7 @@ class CenterAuthScreen extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: TextStyle(
-          // ignore: deprecated_member_use
-          color: const Color.fromRGBO(32, 72, 127, 1).withOpacity(0.8),
+          color: const Color.fromRGBO(32, 72, 127, 1).withValues(alpha: 0.8),
           fontSize: 32,
           fontWeight: FontWeight.w800,
           height: 1,
@@ -95,8 +98,7 @@ class CenterAuthScreen extends StatelessWidget {
     return Text.rich(
       TextSpan(
         style: TextStyle(
-          // ignore: deprecated_member_use
-          color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.8),
+          color: const Color.fromARGB(255, 0, 0, 0).withValues(alpha: 0.8),
           fontSize: 20,
           fontWeight: FontWeight.w600,
           height: 1.5,
@@ -105,17 +107,15 @@ class CenterAuthScreen extends StatelessWidget {
           TextSpan(
             text: 'MindKeep',
             style: TextStyle(
-              // color: Color.fromRGBO(32, 72, 127, 1),
               color: Color(0xFFEC9D53),
               fontSize: 24,
               fontWeight: FontWeight.w800,
             ),
           ),
           TextSpan(
-            // ignore: lines_longer_than_80_chars
             text:
-                // ignore: lines_longer_than_80_chars
-                ' giúp bạn nhận diện và\ntheo dõi trạng thái tinh thần mỗi ngày.',
+                ' giúp bạn nhận diện và\ntheo dõi '
+                'trạng thái tinh thần mỗi ngày.',
           ),
         ],
       ),
@@ -149,12 +149,9 @@ class CenterAuthScreen extends StatelessWidget {
           padding: EdgeInsets.fromLTRB(24, 24, 24, 16 + bottomPadding),
           width: double.infinity,
           decoration: BoxDecoration(
-            // ignore: deprecated_member_use
-            color: const Color.fromRGBO(32, 72, 127, 1).withOpacity(0.2),
-            // ignore: deprecated_member_use, lines_longer_than_80_chars
+            color: const Color.fromRGBO(32, 72, 127, 1).withValues(alpha: 0.2),
             border: Border.all(
-              // ignore: deprecated_member_use
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               width: 1.5,
             ),
             borderRadius: const BorderRadius.all(Radius.circular(40)),
@@ -162,38 +159,35 @@ class CenterAuthScreen extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildStyledButton(
+              PrimaryButton(
                 text: 'Đăng ký ngay',
-                onPressed: () {},
-                backgroudColor: Colors.transparent,
+                onPressed: () {
+                   context.push(PageRoutes.signUp);
+                },
+                backgroundColor: Colors.transparent,
                 textColor: Colors.white,
               ),
               const SizedBox(height: 15),
 
-              _buildStyledButton(
+              PrimaryButton(
                 text: 'Đăng ký với Email',
                 onPressed: () {},
-                // ignore: deprecated_member_use, lines_longer_than_80_chars
-                backgroudColor: const Color.fromRGBO(
-                  32,
-                  72,
-                  127,
-                  1,
-                  // ignore: deprecated_member_use
-                ).withOpacity(0.7),
+                backgroundColor: Colors.transparent,
                 textColor: Colors.white,
                 imageIconPath: 'assets/images/email.png',
               ),
               const SizedBox(height: 20),
 
-              Row(
+              const Row(
                 children: [
                   Expanded(
-                    child: _buildSocialButton('assets/images/Google.png'),
+                    child: SocialButton(imagePath: 'assets/images/Google.png'),
                   ),
-                  const SizedBox(width: 20),
+                  SizedBox(width: 20),
                   Expanded(
-                    child: _buildSocialButton('assets/images/Facebook.png'),
+                    child: SocialButton(
+                      imagePath: 'assets/images/Facebook.png',
+                    ),
                   ),
                 ],
               ),
@@ -211,7 +205,9 @@ class CenterAuthScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                       context.push(PageRoutes.signIn);
+                    },
                     child: const Text(
                       ' Đăng Nhập',
                       style: TextStyle(
@@ -228,63 +224,6 @@ class CenterAuthScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildStyledButton({
-    required String text,
-    required VoidCallback onPressed,
-    required Color backgroudColor,
-    required Color textColor,
-    IconData? icon,
-    String? imageIconPath,
-  }) {
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: textColor,
-        // ignore: deprecated_member_use
-        side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1.5),
-
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        minimumSize: const Size(double.infinity, 50),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          if (icon != null) ...[
-            Icon(icon, color: textColor),
-            const SizedBox(width: 10),
-          ] else if (imageIconPath != null) ...[
-            Image.asset(imageIconPath, width: 24, height: 24),
-            const SizedBox(width: 10),
-          ],
-          Text(
-            text,
-            style: TextStyle(
-              color: textColor,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSocialButton(String imagePath) {
-    return GestureDetector(
-      onTap: () {},
-      child: Container(
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          // ignore: deprecated_member_use
-          border: Border.all(color: Colors.white.withOpacity(0.5), width: 1.5),
-          borderRadius: BorderRadius.circular(40),
-        ),
-        child: Image.asset(imagePath, width: 30, height: 30),
       ),
     );
   }

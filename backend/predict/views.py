@@ -1,5 +1,6 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
+from permission.authentication import FirebaseAuthentication
 from .serializers import PredictSerializers
 from rest_framework.response import Response
 from firebase_admin import firestore
@@ -9,7 +10,6 @@ import traceback
 import mediapipe as mp
 import tensorflow as tf
 from datetime import datetime
-from google.cloud.firestore_v1.base_query import FieldFilter
 from collections import defaultdict
 from backend.utils.firestore_utils import serialize_doc
 from user_auth.views import UserViewSet
@@ -24,6 +24,7 @@ emotion_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutr
 mp_face_detection = mp.solutions.face_detection
 
 class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
+    authentication_classes = [FirebaseAuthentication]
 
     def get_final_emotion(self, prediction_id):
         try:
@@ -53,7 +54,8 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
                 "updated_at": datetime.utcnow(),
             }
 
-            write_time, doc_ref = db.collection("predictions").add(predict_info)
+            # CollectionReference.add(...) returns (DocumentReference, write_time)
+            doc_ref, write_time = db.collection("predictions").add(predict_info)
 
             return {
                 "prediction_id": doc_ref.id,
@@ -166,26 +168,12 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
 
     
     def list(self, request):
-        user_id = request.data.get('user_id')
-
-        is_auth = UserViewSet()
-        user = is_auth.check_user_exists(user_id)
-        if isinstance(user, Response):
-            return user 
-
-        if not user_id:
-            return Response({"error": "Vui lòng đặng nhập tài khoản"}, status=status.HTTP_400_BAD_REQUEST)
-
+        user = request.user
         try:
             col_ref = db.collection('predictions')
-            if user_id:
-                docs = col_ref.where(filter=FieldFilter("user_id", "==", user_id)).stream()
-            else:
-                docs = col_ref.stream()
+            docs = col_ref.where('user_id', '==', user.uid).stream()
 
-            results = []
-            for doc in docs:
-                results.append(serialize_doc(doc))
+            results = [serialize_doc(doc) for doc in docs]
 
             return Response({"count": len(results), "result": results}, status=status.HTTP_200_OK)
 
