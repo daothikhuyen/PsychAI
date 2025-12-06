@@ -3,6 +3,7 @@ import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/data/model/destination.dart';
 import 'package:frontend/features/home/upload_image_screen.dart';
 import 'package:frontend/features/layout/bottom_navigation.dart';
+import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class LayoutScaffold extends StatefulWidget {
@@ -18,32 +19,17 @@ class LayoutScaffold extends StatefulWidget {
 class _LayoutScaffoldState extends State<LayoutScaffold> {
   final List<Destination> destinations = [
     Destination(id: 'home', icon: Icons.home, labelKey: 'Trang chủ'),
-    Destination(
-      id: 'news',
-      icon: Icons.article_outlined,
-      labelKey: 'Tin tức',
-    ),
+    Destination(id: 'news', icon: Icons.article_outlined, labelKey: 'Tin tức'),
     Destination(id: 'chat', icon: Icons.chat, labelKey: 'chat'),
-    Destination(
-      id: 'profile',
-      icon: Icons.person_outline,
-      labelKey: 'Cá nhân',
-    ),
+    Destination(id: 'profile', icon: Icons.person_outline, labelKey: 'Cá nhân'),
   ];
-
-  void _startTestFlow() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const UploadImageScreen()),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: widget.navigationShell,
       floatingActionButton: FloatingActionButton(
-        onPressed: _startTestFlow,
+        onPressed: () => context.push(PageRoutes.testPsych),
         backgroundColor: AppColors.primary700,
         elevation: 2,
         child: const Icon(

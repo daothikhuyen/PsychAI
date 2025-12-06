@@ -1,33 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
+import 'package:frontend/data/model/predictions.dart';
 import 'package:frontend/features/home/widget/card_text_item.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeMainScreen extends StatelessWidget {
-  const HomeMainScreen({super.key});
+  const HomeMainScreen({required this.testResults, super.key});
 
-  // ignore: avoid_field_initializers_in_const_classes
-  final List<Map<String, dynamic>> testResults = const [
-    {
-      'id': 1,
-      'date': '16-08-2025',
-      'emotion': 'Ngạc nhiên',
-      'emotionEmoji': '😍',
-    },
-    // ignore: lines_longer_than_80_chars
-    {
-      'id': 2,
-      'date': '20-08-2025',
-      'emotion': 'Tức giận',
-      'emotionEmoji': '😭',
-    },
-    {'id': 3, 'date': '28-08-2025', 'emotion': 'Buồn', 'emotionEmoji': '😔'},
-  ];
+  final List<Predictions> testResults;
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(24, 14, 24, 24),
+      padding: const EdgeInsets.fromLTRB(19, 24, 19, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -67,16 +52,15 @@ class HomeMainScreen extends StatelessWidget {
 
           const Text(
             'Các bài kiểm tra',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF3B5B84),
-            ),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 15),
 
           ...testResults.map((result) {
-            return const CardTextItem();
+            return CardTextItem(
+              prediction: result,
+              count: testResults.indexOf(result) + 1,
+            );
           }),
         ],
       ),

@@ -22,9 +22,9 @@ class UserViewSet(viewsets.ViewSet):
     def check_user_exists(self, email):
         try:
             user = auth.get_user_by_email(email)
-            return user
+            return True
         except auth.UserNotFoundError:
-            return None
+            return False
         
     def _create_firestore_user(seft, uid, username, email):
         user_info = {

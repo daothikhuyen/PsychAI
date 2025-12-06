@@ -1,8 +1,8 @@
 import 'package:frontend/data/api/base_api.dart';
+import 'package:frontend/routing/routes.dart';
 
 class AuthApi {
-  // AuthApi({required this.api});
-  static final BaseApi _api = BaseApi(() async => null);
+  static final BaseApi _api = BaseApi(() async => authController.getToken());
 
   Future<Map<String, dynamic>> signUp(Map<String, dynamic> data) async {
     final response = await _api.call(

@@ -1,7 +1,8 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
-from firebase_admin import firestore, auth
+from firebase_admin import firestore
+from permission.authentication import FirebaseAuthentication
 from backend.utils.firestore_utils import serialize_doc
 from datetime import datetime
 from predict.views import PredictAIViewSet
@@ -11,6 +12,7 @@ db = firestore.client()
 
 # Create your views here.
 class PsychTestViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
+    authentication_classes = [FirebaseAuthentication]
 
     def interpret_overall(self, prediction_id, dass_result):
         predict_ai = PredictAIViewSet()
@@ -107,13 +109,14 @@ class PsychTestViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
             return Response({"error": str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def create(self, request):
+        user = request.user
         is_auth = UserViewSet()
         data = request.data
-        user_id = data.get("user_id")
+        user_id = user.uid
         prediction_id = data.get("prediction_id")
         answers = data.get("answers", [])
 
-        user = is_auth.check_user_exists(user_id)
+        user = is_auth.get_user_by_firebase(user_id)
         if isinstance(user, Response):
             return user 
         

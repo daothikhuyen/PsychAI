@@ -19,7 +19,7 @@ db = firestore.client()
 # Load model
 emotion_model = tf.keras.models.load_model('predict/ml/fer2013_cnn_improved.h5')
 
-emotion_labels = ['Angry', 'Disgust', 'Fear', 'Happy', 'Sad', 'Surprise', 'Neutral']
+emotion_labels = ['Tức giận', 'Lo lắng','Vui vẻ','Bình thường', 'Buồn', 'Ngạc nhiên']
 
 mp_face_detection = mp.solutions.face_detection
 
@@ -54,106 +54,110 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
                 "updated_at": datetime.utcnow(),
             }
 
-            # CollectionReference.add(...) returns (DocumentReference, write_time)
-            doc_ref, write_time = db.collection("predictions").add(predict_info)
-
+            doc_ref = db.collection("predictions").document()  
+            doc_ref.set(predict_info)
+        
             return {
-                "prediction_id": doc_ref.id,
-                "user_id": user_id,
-                "email": email,
-                "emotions": emotions_data,
-                "final_emotion": final_emotion
-            }
+            "id": doc_ref.id,
+            "user_id": user_id,
+            "email": email,
+            "emotions": emotions_data,
+            "final_emotion": final_emotion,
+            "created_at": datetime.utcnow(),
+        }
 
         except Exception as e:
-            traceback.print_exc()
-            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # ném lỗi lên action xử lý
+            raise e
 
     @action(detail=False, methods=['post'])
     def upload_faces(self, request):
-        serializer = PredictSerializers(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = request.user
+                #Save Firestore
+        try:
+            serializer = PredictSerializers(data=request.data)
+            if not serializer.is_valid():
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        data = serializer.validated_data
-        email = data['email']
-        user_id = data['user_id']
-        images = data['images']
+            data = serializer.validated_data
+            email = data['email']
+            user_id = data['user_id']
+            images = data['images']
 
-        is_auth = UserViewSet()
-        user = is_auth.check_user_exists(user_id)
-        if isinstance(user, Response):
-            return user 
+            exists  = UserViewSet().check_user_exists(email)
+            if not exists:
+                return Response({"error": "Người dùng không tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
 
-        emotions_data = []
-        face_inputs = []
-        mp_face_detection_instance = mp.solutions.face_detection.FaceDetection(
-            model_selection=0, min_detection_confidence=0.5
-        )
+            emotions_data = []
+            face_inputs = []
+            mp_face_detection_instance = mp.solutions.face_detection.FaceDetection(
+                model_selection=0, min_detection_confidence=0.5
+            )
 
-        for idx, img in enumerate(images):
-            image_bytes = np.frombuffer(img.read(), np.uint8)
-            frame = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
-            if frame is None:
-                return Response({'error': f'Hình ảnh không hợp lệ tại ảnh {idx}'}, status=400)
+            for idx, img in enumerate(images):
+                image_bytes = np.frombuffer(img.read(), np.uint8)
+                frame = cv2.imdecode(image_bytes, cv2.IMREAD_COLOR)
+                if frame is None:
+                    return Response({'error': f'Hình ảnh không hợp lệ tại ảnh {idx}'}, status=400)
 
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            face_results = mp_face_detection_instance.process(rgb_frame)
+                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                face_results = mp_face_detection_instance.process(rgb_frame)
 
-            if not face_results.detections:
+                if not face_results.detections:
+                    emotions_data.append({
+                        "image_order": idx + 1,
+                        "emotion": "no_face",
+                        "confidence_score": 0.0
+                    })
+                    continue
+
+                detection = face_results.detections[0]
+                bboxC = detection.location_data.relative_bounding_box
+                ih, iw, _ = frame.shape
+                x1 = int(bboxC.xmin * iw)
+                y1 = int(bboxC.ymin * ih)
+                w = int(bboxC.width * iw)
+                h = int(bboxC.height * ih)
+                x1, y1, x2, y2 = max(0, x1), max(0, y1), min(iw, x1 + w), min(ih, y1 + h)
+                face_crop = frame[y1:y2, x1:x2]
+
+                if face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
+                    emotions_data.append({
+                        "image_order": idx + 1,
+                        "emotion": "face_too_small",
+                        "confidence_score": 0.0
+                    })
+                    continue
+
+                # Prepare face_input for model
+                face_gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
+                face_resized = cv2.resize(face_gray, (48, 48))
+                face_input = face_resized.astype("float32") / 255.0
+                face_input = np.expand_dims(face_input, axis=(0, -1))
+                face_inputs.append(face_input)
+
+            if not face_inputs:
+                return Response({'error': 'Không phát hiện thấy khuôn mặt nào hợp lệ'}, status=status.HTTP_400_BAD_REQUEST)
+
+            face_inputs = np.vstack(face_inputs)  # (N,48,48,1)
+            emotion_preds = emotion_model.predict(face_inputs, verbose=0)
+
+            # Build emotions_data
+            for i, e in enumerate(emotion_preds):
+                emotion_index = np.argmax(e)
+                emotion_label = emotion_labels[emotion_index]
+                confidence_score = float(e[emotion_index])
+
                 emotions_data.append({
-                    "image_order": idx + 1,
-                    "emotion": "no_face",
-                    "confidence_score": 0.0
+                    "image_order": i + 1,
+                    "emotion": emotion_label,
+                    "confidence_score": confidence_score
                 })
-                continue
 
-            detection = face_results.detections[0]
-            bboxC = detection.location_data.relative_bounding_box
-            ih, iw, _ = frame.shape
-            x1 = int(bboxC.xmin * iw)
-            y1 = int(bboxC.ymin * ih)
-            w = int(bboxC.width * iw)
-            h = int(bboxC.height * ih)
-            x1, y1, x2, y2 = max(0, x1), max(0, y1), min(iw, x1 + w), min(ih, y1 + h)
-            face_crop = frame[y1:y2, x1:x2]
-
-            if face_crop.shape[0] < 10 or face_crop.shape[1] < 10:
-                emotions_data.append({
-                    "image_order": idx + 1,
-                    "emotion": "face_too_small",
-                    "confidence_score": 0.0
-                })
-                continue
-
-            # Prepare face_input for model
-            face_gray = cv2.cvtColor(face_crop, cv2.COLOR_BGR2GRAY)
-            face_resized = cv2.resize(face_gray, (48, 48))
-            face_input = face_resized.astype("float32") / 255.0
-            face_input = np.expand_dims(face_input, axis=(0, -1))
-            face_inputs.append(face_input)
-
-        if not face_inputs:
-            return Response({'error': 'Không phát hiện thấy khuôn mặt nào hợp lệ'}, status=status.HTTP_400_BAD_REQUEST)
-
-        face_inputs = np.vstack(face_inputs)  # (N,48,48,1)
-        emotion_preds = emotion_model.predict(face_inputs, verbose=0)
-
-        # Build emotions_data
-        for i, e in enumerate(emotion_preds):
-            emotion_index = np.argmax(e)
-            emotion_label = emotion_labels[emotion_index]
-            confidence_score = float(e[emotion_index])
-
-            emotions_data.append({
-                "image_order": i + 1,
-                "emotion": emotion_label,
-                "confidence_score": confidence_score
-            })
-
-        #Save Firestore
-        result = self.save_face_emotions(email, user_id, emotions_data)
-        return Response({"results": result}, status=status.HTTP_200_OK)
+            result = self.save_face_emotions(email, user_id, emotions_data)
+            return Response({"results": result}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
     def retrieve(self, request, pk=None):
         try:
