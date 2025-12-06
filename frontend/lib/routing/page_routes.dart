@@ -5,6 +5,10 @@ class PageRoutes {
   static const String signUp = '/signup';
   static const String signIn = '/signin';
   static const String homePage = '/home';
+  static const String detailPrediction = '/detailPrediction';
+  static const String testPsych = '/testPsych';
+  static const String examDass21 = '/examDass21';
+  static const String finalResult = '/finalResult';
   static const String seeAllPage = '/seeAll';
   static const String profile = '/profile';
   static const String personalInfo = '/personalInfo';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/data/model/destination.dart';
 import 'package:frontend/features/layout/layout_scaffold.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,42 +16,45 @@ class BottomNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFFC1C7CF),
-            offset: Offset(0, -5),
-            blurRadius: 60,
-          ),
-        ],
-      ),
+    return BottomAppBar(
+      height: 80,
+      color: AppColors.primary500,
+      shape: const CircularNotchedRectangle(),
+      notchMargin: 12,
       child: NavigationBarTheme(
         data: NavigationBarThemeData(
           labelTextStyle: WidgetStateTextStyle.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
               return GoogleFonts.jost().copyWith(
                 fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFF2853af),
+                fontWeight: FontWeight.w800,
+                color: AppColors.primary800,
               );
             }
             return GoogleFonts.jost().copyWith(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: const Color(0xFF2853af),
+              color: AppColors.greyscale500,
             );
+          }),
+          iconTheme: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return const IconThemeData(color: AppColors.primary800, size: 28);
+            }
+
+            return const IconThemeData(color: AppColors.greyscale500);
           }),
         ),
         child: NavigationBar(
+          backgroundColor: Colors.transparent,
           selectedIndex: widget.navigationShell.currentIndex,
           indicatorColor: Colors.transparent,
           onDestinationSelected: widget.navigationShell.goBranch,
           destinations:
               destination.map((e) {
                 return NavigationDestination(
-                  icon: const Icon(Icons.home_outlined),
-                  selectedIcon: const Icon(Icons.home),
+                  icon: Icon(e.icon),
+                  selectedIcon: Icon(e.icon),
                   label: e.labelKey,
                 );
               }).toList(),

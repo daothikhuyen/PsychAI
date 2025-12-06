@@ -5,13 +5,14 @@ import 'package:frontend/data/model/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalStorageHelper {
-  static const String tokenKey = 'auth_token';
+  static const _tokenKey = 'token';
   static const _keyUser = 'currentUser';
 
   static Future<void> saveUser(PsychUser user) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_keyUser, jsonEncode(user.toJson()));
+      await prefs.setString(_tokenKey, user.token);
     } on MissingPluginException {
       throw Exception('Lưu user thất bại: Plugin không được đăng ký');
     } on PlatformException catch (e) {
@@ -38,6 +39,7 @@ class LocalStorageHelper {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_keyUser);
+      await prefs.remove(_tokenKey);
     } on MissingPluginException {
       throw Exception('Xoá user thất bại: Plugin không được đăng ký');
     } on PlatformException catch (e) {

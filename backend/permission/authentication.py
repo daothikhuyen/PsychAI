@@ -1,7 +1,8 @@
 from rest_framework.authentication import BaseAuthentication
 from rest_framework import permissions
-from rest_framework import exceptions
 from firebase_admin import auth as firebase_auth
+from rest_framework import exceptions
+
 
 class FirebaseAuthentication(BaseAuthentication, permissions.BasePermission):
     def authenticate(self, request):

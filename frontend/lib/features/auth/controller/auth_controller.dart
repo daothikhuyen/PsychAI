@@ -8,6 +8,7 @@ import 'package:frontend/features/auth/helper/local_storage_helper.dart';
 import 'package:frontend/features/auth/utils/validators.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthController extends ChangeNotifier {
   AuthController() {
@@ -48,11 +49,15 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> clearUser() {
+  Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
+  }
+
+  Future<void> clearUser() async {
     _currentUser = null;
     _isSignIn = false;
     notifyListeners();
-    return Future.value();
   }
 
   Future<void> isLoginIn() async {
@@ -60,7 +65,7 @@ class AuthController extends ChangeNotifier {
     if (user != null) {
       setUser(user);
     }
-    notifyListeners(); 
+    notifyListeners();
   }
 
   void togglePassword() {
@@ -81,7 +86,6 @@ class AuthController extends ChangeNotifier {
       if (response['user'] != null) {
         final user = PsychUser.fromJson(response['user']);
         await LocalStorageHelper.saveUser(user);
-        print('User loaded from local storage: $user');
         setUser(user);
       }
 
@@ -121,11 +125,11 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signOut(BuildContext context) async{
+  Future<void> signOut(BuildContext context) async {
     await LocalStorageHelper.clearUser();
-    await  clearUser();
+    await clearUser();
     if (context.mounted) {
-      context.go(PageRoutes.signIn);
+      context.go(PageRoutes.auth);
     }
   }
 }

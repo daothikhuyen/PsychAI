@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/features/test/dass21_test_screen.dart';
+import 'package:frontend/core/themes/app_colors.dart';
+import 'package:frontend/data/model/predictions.dart';
+import 'package:frontend/features/test_emtion/widget/result_prediction.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class InitialResultScreen extends StatelessWidget {
-  const InitialResultScreen({super.key});
+  const InitialResultScreen({super.key, this.predictionResult});
 
-  static Future<void> show(BuildContext context) {
+  final Predictions? predictionResult;
+
+  static Future<void> show(
+    BuildContext context,
+    Predictions? predictionResult,
+  ) {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // Ngăn đóng bằng cách chạm ra ngoài
+      barrierDismissible: false,
       builder: (BuildContext context) {
-        return const InitialResultScreen();
+        return InitialResultScreen(predictionResult: predictionResult);
       },
     );
   }
@@ -24,53 +33,51 @@ class InitialResultScreen extends StatelessWidget {
           'Dự đoán ban đầu',
           style: TextStyle(
             fontSize: 20,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w500,
             color: Color.fromARGB(255, 0, 0, 0),
           ),
         ),
       ),
 
-      content: const Column(
+      content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'Hiện tại bạn đang trong trạng thái tâm lý lo lắng',
+            resultPrediction(predictionResult?.finalEmotion ?? 'Chưa xác định'),
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 18,
-              color: Color(0xFF323F4B),
+              color: AppColors.greyscale500,
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: 20),
-          Text(
+          const SizedBox(height: 20),
+          const Text(
             'Chọn tiếp tục để kiểm tra thêm',
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 18,
-              color: Color(0xFF7B8794),
-              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              color: AppColors.backgroundDart,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
 
-      actionsPadding: const EdgeInsets.only(left: 60, right: 60, bottom: 24),
+      actionsPadding: const EdgeInsets.only(left: 70, right: 70, bottom: 24),
       actions: <Widget>[
         ElevatedButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const Dass21TestScreen()),
-            );
-          },
+          onPressed:
+              () => context.go(
+                PageRoutes.examDass21,
+                extra: predictionResult?.id??'',
+              ),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF3B5B84),
             foregroundColor: Colors.white,
             minimumSize: const Size(double.infinity, 50),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(14),
             ),
             elevation: 0,
           ),

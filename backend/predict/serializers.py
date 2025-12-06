@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 class PredictSerializers(serializers.Serializer):
-    user_id = serializers.CharField()
     email = serializers.EmailField()
+    user_id = serializers.CharField()
     images =  serializers.ListField(
         child = serializers.ImageField(),
         min_length = 5,

@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
-// import 'package:frontend/features/home/test_start_screen.dart';
 
 class HomeWelcomeScreen extends StatelessWidget {
   const HomeWelcomeScreen({super.key});
 
-  // ignore: unused_element
-  void _startFirstTest(BuildContext context) {
-    // Chuyển sang màn hình bắt đầu luồng test (Upload Image)
-    // Navigator.push(
-    //   context,
-    //   // ignore: prefer_const_constructors
-    //   MaterialPageRoute(builder: (context) =>  TestStartScreen()),
-    // );
-  }
+  void _startFirstTest(BuildContext context) {}
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +20,6 @@ class HomeWelcomeScreen extends StatelessWidget {
         child: Column(
           children: [
             const Align(
-              // alignment: Alignment.center,
               child: Text.rich(
                 textAlign: TextAlign.center,
                 TextSpan(
@@ -62,7 +52,7 @@ class HomeWelcomeScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30),
-          
+
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -75,7 +65,6 @@ class HomeWelcomeScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(10),
                     child: Image.asset(
                       'assets/images/Together1.png',
-                      // color: PrimaryColor,
                       width: 50,
                       height: 50,
                     ),
@@ -84,8 +73,8 @@ class HomeWelcomeScreen extends StatelessWidget {
 
                   const Expanded(
                     child: Text(
-                      // ignore: lines_longer_than_80_chars
-                      'Hãy cùng chúng tôi lắng nghe và thấu hiểu sức khỏe tinh thần của bạn',
+                      'Hãy cùng chúng tôi lắng nghe và thấu'
+                      ' hiểu sức khỏe tinh thần của bạn',
                       style: TextStyle(
                         color: Color.fromARGB(255, 0, 0, 0),
                         fontSize: 18,
@@ -98,38 +87,37 @@ class HomeWelcomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // 
             GestureDetector(
-              onTap: () => _startFirstTest(context), // <--- Gọi hàm điều hướng
+              onTap: () => _startFirstTest(context),
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: buttonColor,
                   borderRadius: BorderRadius.circular(20),
                 ),
-              child: const Column(
-                children: [
-                  Text(
-                    'BẮT ĐẦU',
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                child: const Column(
+                  children: [
+                    Text(
+                      'BẮT ĐẦU',
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 5),
-                  Text(
-                    'BÀI KIỂM TRA ĐẦU TIÊN',
-                    style: TextStyle(
-                      color: primaryColor,
-                      fontSize: 22,
-                      fontWeight: FontWeight.w900,
+                    SizedBox(height: 5),
+                    Text(
+                      'BÀI KIỂM TRA ĐẦU TIÊN',
+                      style: TextStyle(
+                        color: primaryColor,
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
             const SizedBox(height: 30),
             const Text(
               'Bạn chỉ mất 5 phút để nhận\nđánh giá đầu tiên',
@@ -145,7 +133,6 @@ class HomeWelcomeScreen extends StatelessWidget {
           ],
         ),
       ),
-  
     );
   }
 }
