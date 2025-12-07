@@ -60,7 +60,7 @@ class AuthController extends ChangeNotifier {
     if (user != null) {
       setUser(user);
     }
-    notifyListeners(); 
+    notifyListeners();
   }
 
   void togglePassword() {
@@ -81,6 +81,7 @@ class AuthController extends ChangeNotifier {
       if (response['user'] != null) {
         final user = PsychUser.fromJson(response['user']);
         await LocalStorageHelper.saveUser(user);
+        // ignore: avoid_print
         print('User loaded from local storage: $user');
         setUser(user);
       }
@@ -121,9 +122,9 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signOut(BuildContext context) async{
+  Future<void> signOut(BuildContext context) async {
     await LocalStorageHelper.clearUser();
-    await  clearUser();
+    await clearUser();
     if (context.mounted) {
       context.go(PageRoutes.signIn);
     }

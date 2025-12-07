@@ -9,3 +9,4 @@ const Color greenTextColor = Color.fromARGB(255, 2, 124, 39);
 const Color inactiveIconColor = Color.fromARGB(255, 89, 89, 89);
 // ignore: eol_at_end_of_file
 const Color inactiveTextColor = Color.fromARGB(255, 101, 101, 101);
+const Color backgroundColor = Color(0xFFF8F9FA);
