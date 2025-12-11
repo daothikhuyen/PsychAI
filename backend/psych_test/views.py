@@ -7,12 +7,14 @@ from backend.utils.firestore_utils import serialize_doc
 from datetime import datetime
 from predict.views import PredictAIViewSet
 from user_auth.views import UserViewSet
+from rest_framework.permissions import IsAuthenticated
 
 db = firestore.client()
 
 # Create your views here.
 class PsychTestViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
     authentication_classes = [FirebaseAuthentication]
+    permission_classes = [IsAuthenticated] 
 
     def interpret_overall(self, prediction_id, dass_result):
         predict_ai = PredictAIViewSet()

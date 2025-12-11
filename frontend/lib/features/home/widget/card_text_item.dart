@@ -34,9 +34,9 @@ class CardTextItem extends StatelessWidget {
           border: Border.all(color: AppColors.greyscale200, width: 1.1),
         ),
         child: InkWell(
-          onTap: () {
-            controller.getResultPrediction(context, prediction.id);
-            context.push(
+          onTap: () async {
+            await controller.getResultPrediction(context, prediction.id);
+            await context.push(
               PageRoutes.detailPrediction,
               extra: {
                 'prediction': prediction,

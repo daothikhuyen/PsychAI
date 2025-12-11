@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/exception/api_exception.dart';
+import 'package:frontend/core/widgets/alter/loading_overlay.dart';
 import 'package:frontend/core/widgets/alter/snack_bar.dart';
 import 'package:frontend/data/api/home_api.dart';
 import 'package:frontend/data/model/dass21_result.dart';
@@ -34,6 +35,7 @@ class HomeController extends ChangeNotifier {
     BuildContext context,
     String idPrediction,
   ) async {
+    final overlay = LoadingOverlay()..showLoading(context);
     try {
       final response = await service.getResultPrediction(idPrediction);
       final result = response['test'];
@@ -42,6 +44,8 @@ class HomeController extends ChangeNotifier {
       notifyListeners();
     } on ApiException catch (e) {
       PredictSnackBar().showSnackBar(context, e.toString());
+    } finally {
+      overlay.hideLoading(context);
     }
   }
 }

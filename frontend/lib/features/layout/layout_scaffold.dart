@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/data/model/destination.dart';
-import 'package:frontend/features/home/upload_image_screen.dart';
 import 'package:frontend/features/layout/bottom_navigation.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';

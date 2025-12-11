@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/core/uitls/format.dart';
+import 'package:frontend/core/widgets/devider.dart';
 import 'package:frontend/data/model/dass21_result.dart';
 import 'package:frontend/data/model/predictions.dart';
 import 'package:frontend/features/detail_prediction/widget/detail_row.dart';
 import 'package:frontend/features/detail_prediction/widget/score_row.dart';
 import 'package:frontend/features/detail_prediction/widget/section_title.dart';
 import 'package:frontend/features/home/helper/emoji_helper.dart';
-import 'package:frontend/core/widgets/devider.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';

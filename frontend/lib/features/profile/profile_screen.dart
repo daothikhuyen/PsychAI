@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/core/themes/theme.dart';
 import 'package:frontend/features/auth/controller/auth_controller.dart';
+import 'package:frontend/features/profile/widgets/sign_out_dialog.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -66,14 +67,6 @@ class ProfileScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // GestureDetector(
-                      //   onTap: () {},
-                      //   child: SvgPicture.asset(
-                      //     'assets/images/logo.png',
-                      //     width: 20,
-                      //     height: 20,
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),
@@ -82,7 +75,7 @@ class ProfileScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 16),
                   child: Center(
                     child: TextButton(
-                      onPressed: () => authController.signOut(context),
+                      onPressed: () => showSignOutDialog(context),
                       child: Text(
                         'Đăng xuất',
                         style: HBTextStyles.bodySemiboldLarge(

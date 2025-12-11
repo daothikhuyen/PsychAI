@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/models/test_result_model.dart';
 import 'package:frontend/features/auth/controller/auth_controller.dart';
 import 'package:frontend/features/home/controller/home_controller.dart';
-import 'package:frontend/features/home/sceen/home_main_screen.dart';
-import 'package:frontend/features/home/test_conclusion_screen.dart';
+import 'package:frontend/features/home/home_main_screen.dart';
+import 'package:frontend/features/home/home_welcome_screen.dart';
 import 'package:frontend/features/home/widget/header_bar.dart';
-import 'package:frontend/features/home/sceen/home_welcome_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {

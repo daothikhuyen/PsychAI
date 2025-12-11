@@ -121,11 +121,11 @@ class BaseApi {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return body;
       } else {
-        if (response.statusCode == 403) {
-          print('port: ${response.statusCode}');
+        if (response.statusCode == 401 || response.statusCode == 403) {
           await authController.clearUser();
-          if (context != null) {
-            context.go(PageRoutes.auth);
+          final navContext = navigatorKey.currentContext;
+          if (navContext != null) {
+            GoRouter.of(navContext).go(PageRoutes.auth);
           }
         }
         throw ApiException(message: body['error'], code: response.statusCode);

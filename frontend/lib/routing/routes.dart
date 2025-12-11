@@ -4,13 +4,13 @@ import 'package:frontend/features/auth/controller/auth_controller.dart';
 import 'package:frontend/features/auth/sign_in_screen.dart';
 import 'package:frontend/features/auth/sign_up_screen.dart';
 import 'package:frontend/features/detail_prediction/detail_prediction_screen.dart';
+import 'package:frontend/features/exam_dass21/controller/exam_dass21_controller.dart';
 import 'package:frontend/features/exam_dass21/exam_conclusion_screen.dart';
+import 'package:frontend/features/exam_dass21/exam_dass21_screen.dart';
 import 'package:frontend/features/home/controller/home_controller.dart';
-import 'package:frontend/features/home/sceen/home_screen.dart';
+import 'package:frontend/features/home/home_screen.dart';
 import 'package:frontend/features/layout/layout_scaffold.dart';
 import 'package:frontend/features/profile/profile_screen.dart';
-import 'package:frontend/features/exam_dass21/controller/exam_dass21_controller.dart';
-import 'package:frontend/features/exam_dass21/exam_dass21_screen.dart';
 import 'package:frontend/features/test_emtion/controller/test_emotion_controller.dart';
 import 'package:frontend/features/test_emtion/test_emotion_screen.dart';
 import 'package:frontend/routing/animation.dart';
@@ -18,13 +18,13 @@ import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-final _rootNavigatorKey = GlobalKey<NavigatorState>();
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 final authController = AuthController();
 
 final goRouter = GoRouter(
   initialLocation:
       authController.isSignIn ? PageRoutes.homePage : PageRoutes.auth,
-  navigatorKey: _rootNavigatorKey,
+  navigatorKey: navigatorKey,
   routes: [
     GoRoute(
       path: PageRoutes.auth,
