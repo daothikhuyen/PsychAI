@@ -66,6 +66,7 @@ class AuthController extends ChangeNotifier {
       setUser(user);
     }
     notifyListeners();
+    notifyListeners();
   }
 
   void togglePassword() {
