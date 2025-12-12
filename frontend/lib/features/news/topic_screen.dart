@@ -1,15 +1,10 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
 import 'package:frontend/features/news/articles_data.dart';
-import 'package:frontend/features/news/news_detail_screen.dart';
+import 'package:frontend/features/news/widget/article_card.dart';
 
 class TopicScreen extends StatelessWidget {
-  const TopicScreen(
-    {
-      required this.topic, super.key
-    });
+  const TopicScreen({required this.topic, super.key});
   final String topic;
 
   void _returnToHome(BuildContext context) {
@@ -18,8 +13,7 @@ class TopicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topicArticles =
-        articles.where((a) => a['topic'] == topic).toList();
+    final topicArticles = articles.where((a) => a['topic'] == topic).toList();
 
     final topicName = _topicDisplayName(topic);
 
@@ -57,7 +51,7 @@ class TopicScreen extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _buildSearchBar(),
+            const SearchBar(),
             const SizedBox(height: 16),
 
             ListView.separated(
@@ -67,95 +61,11 @@ class TopicScreen extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(height: 20),
               itemBuilder: (context, index) {
                 final article = topicArticles[index];
-                return _buildArticleCard(context, article);
+                return ArticleCard(article: article);
               },
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildArticleCard(BuildContext context, Map<String, dynamic> article) {
-  return GestureDetector(
-    onTap: () => Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) =>
-            NewsDetailScreen(articleId: article['id'] as int),
-      ),
-    ),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: Image.network(
-            article['imageUrl'],
-            height: 180,
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
-        const SizedBox(height: 10),
-
-        Text(
-          article['title'] ?? '',
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            height: 1.3,
-          ),
-        ),
-        const SizedBox(height: 8),
-
-        Text(
-          article['description'] ?? '',
-          style: const TextStyle(
-            fontSize: 15,
-            color: inactiveTextColor,
-            height: 1.3,
-          ),
-          maxLines: 3,
-          overflow: TextOverflow.ellipsis,
-        ),
-        const SizedBox(height: 8),
-
-        // ignore: avoid_dynamic_calls
-        if (article['author'] != null && article['author'].trim().isNotEmpty)
-          Text(
-            "Tác giả: ${article['author']}",
-            style: const TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-              fontStyle: FontStyle.italic,
-            ),
-          ),
-        const SizedBox(height: 15),
-      ],
-    ),
-  );
-}
-
-  Widget _buildSearchBar() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: const Row(
-        children: [
-          Icon(Icons.search, color: inactiveIconColor),
-          SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              'Tìm kiếm bài viết...',
-              style: TextStyle(color: inactiveIconColor),
-            ),
-          ),
-        ],
       ),
     );
   }

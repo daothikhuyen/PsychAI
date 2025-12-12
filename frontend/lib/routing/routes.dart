@@ -10,6 +10,7 @@ import 'package:frontend/features/exam_dass21/exam_dass21_screen.dart';
 import 'package:frontend/features/home/controller/home_controller.dart';
 import 'package:frontend/features/home/home_screen.dart';
 import 'package:frontend/features/layout/layout_scaffold.dart';
+import 'package:frontend/features/news/news_screen.dart';
 import 'package:frontend/features/profile/profile_screen.dart';
 import 'package:frontend/features/test_emtion/controller/test_emotion_controller.dart';
 import 'package:frontend/features/test_emtion/test_emotion_screen.dart';
@@ -122,7 +123,7 @@ final goRouter = GoRouter(
               path: PageRoutes.chat,
               pageBuilder:
                   (context, state) =>
-                      animationRouter(const HomeScreen(), state),
+                      animationRouter(const NewsScreen(), state),
             ),
           ],
         ),
@@ -132,7 +133,7 @@ final goRouter = GoRouter(
               path: PageRoutes.news,
               pageBuilder:
                   (context, state) =>
-                      animationRouter(const HomeScreen(), state),
+                      animationRouter(const NewsScreen(), state),
             ),
           ],
         ),
@@ -150,4 +151,3 @@ final goRouter = GoRouter(
     ),
   ],
 );
-

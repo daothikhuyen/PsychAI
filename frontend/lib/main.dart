@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/core/themes/theme.dart';
 import 'package:frontend/routing/routes.dart';
 import 'package:provider/provider.dart';
 
@@ -20,15 +21,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      title: 'Flutter Demo',
+      theme: lightMode,
+      routerConfig: goRouter,
       debugShowCheckedModeBanner: false,
-      title: 'Public Feed UI',
-      theme: ThemeData(
-        scaffoldBackgroundColor: const Color(0xFFF7F7F7),
-        primarySwatch: Colors.blue,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
     );
   }
 }

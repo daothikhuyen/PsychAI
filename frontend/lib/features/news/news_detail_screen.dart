@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
 import 'package:frontend/features/news/articles_data.dart';
 import 'package:frontend/features/news/news_screen.dart';
+import 'package:frontend/features/news/widget/card_articles_sugesstion.dart';
+import 'package:frontend/features/news/widget/tag_item.dart';
 import 'package:intl/intl.dart';
 
 class NewsDetailScreen extends StatefulWidget {
@@ -15,7 +17,6 @@ class NewsDetailScreen extends StatefulWidget {
 class _NewsDetailScreenState extends State<NewsDetailScreen> {
   bool isLiked = false;
   bool isBookmarked = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +59,6 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             const SizedBox(height: 8),
 
             Text(
-              // ignore: lines_longer_than_80_chars
               '${article['author']}  •  ${article['source']}  •  $formattedDate',
               style: const TextStyle(color: Colors.grey, fontSize: 14),
             ),
@@ -124,10 +124,8 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
             Wrap(
               spacing: 10,
               children: List.generate(
-                // ignore: avoid_dynamic_calls
                 article['tags'].length,
-                // ignore: avoid_dynamic_calls
-                (i) => _buildTag(article['tags'][i]),          
+                (i) => TagItem(tag: article['tags'][i]),
               ),
             ),
 
@@ -157,86 +155,21 @@ class _NewsDetailScreenState extends State<NewsDetailScreen> {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  for (
-                    // ignore: prefer_final_in_for_each
-                    var a in articles.where((e) => e['id'] != widget.articleId)
-                  )
+                  for (final a in articles.where(
+                    (e) => e['id'] != widget.articleId,
+                  ))
                     Padding(
                       padding: const EdgeInsets.only(right: 12),
-                      child: _buildSuggestedItem(
-                        context: context,
+                      child: CardArticlesSugesstion(
                         id: a['id'],
                         title: a['title'],
                         imageUrl: a['imageUrl'],
                       ),
-
                     ),
                 ],
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSuggestedItem({
-    required BuildContext context,
-    required int id,
-    required String title,
-    required String imageUrl,
-  }) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => NewsDetailScreen(articleId: id),
-          ),
-        );
-      },
-      child: SizedBox(
-        width: 140,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.network(
-                imageUrl,
-                height: 80,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTag(String tag) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.grey.shade300),
-      ),
-      child: Text(
-        tag, 
-        style: const TextStyle(
-          fontWeight: FontWeight.w400,
-          fontSize: 16,
         ),
       ),
     );
