@@ -29,19 +29,19 @@ class PsychTestViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
         anxiety_level = dass_result["anxiety"]["level"]
 
         # Case of depression
-        if emotion_lower == "sad" and depression_level in ["Vừa", "Nặng", "Rất nặng"]:
+        if emotion_lower == "Buồn" and depression_level in ["Vừa", "Nặng", "Rất nặng"]:
             return "Có dấu hiệu trầm cảm, nên nghỉ ngơi và chia sẻ với người thân hoặc chuyên gia."
 
         # In case of stable psychology
-        elif emotion_lower == "happy" and all(d["level"] == "Bình thường" for d in dass_result.values()):
+        elif emotion_lower == "Vui vẻ" and all(d["level"] == "Bình thường" for d in dass_result.values()):
             return "Tâm lý ổn định, cảm xúc tích cực. Tiếp tục duy trì nhé!"
 
         # High stress situations
-        elif emotion_lower == "angry" and stress_level in ["Nặng", "Rất nặng"]:
+        elif emotion_lower == "Tức giân" and stress_level in ["Nặng", "Rất nặng"]:
             return "Căng thẳng cao, cần thư giãn hoặc thay đổi môi trường làm việc."
 
         # High anxiety cases
-        elif emotion_lower in ["fear", "surprise"] and anxiety_level in ["Nặng", "Rất nặng"]:
+        elif emotion_lower in ["Lo lắng", "Ngạc nhiên"] and anxiety_level in ["Nặng", "Rất nặng"]:
             return "Lo âu cao, nên hít thở sâu, thư giãn và chia sẻ cảm xúc với người tin cậy."
 
         # The remaining cases

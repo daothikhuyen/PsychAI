@@ -10,8 +10,8 @@ class TagItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.greyscale100),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: AppColors.greyscale200),
       ),
       child: Text(
         tag,

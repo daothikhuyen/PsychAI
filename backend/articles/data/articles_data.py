@@ -10,7 +10,8 @@ articles = [
     "source": "TinhYeuVaCuocSong",
     "publishedAt": "2025-11-20T09:30:00Z",
     "url": "https://example.com/anxiety_daily",
-    "imageUrl": "https://newsinhealth.nih.gov/sites/newsinhealth/files/2016/March/illustration-worried-man-apart-circle-friends-cropped.jpg"
+    "imageUrl": "https://newsinhealth.nih.gov/sites/newsinhealth/files/2016/March/illustration-worried-man-apart-circle-friends-cropped.jpg",
+    "like_count": 3
   },
   {
     "id" : 2,
@@ -23,7 +24,8 @@ articles = [
     "source": "ChamSocTamLy",
     "publishedAt": "2025-11-18T14:00:00Z",
     "url": "https://example.com/winter_depression",
-    "imageUrl": "https://www.mmhg.com.au/hs-fs/hubfs/different-type-of-depression.jpg?width=1000&height=782&name=different-type-of-depression.jpg"
+    "imageUrl": "https://www.mmhg.com.au/hs-fs/hubfs/different-type-of-depression.jpg?width=1000&height=782&name=different-type-of-depression.jpg",
+    "like_count": 4
   },
   {
     "id" : 3,
@@ -36,7 +38,8 @@ articles = [
     "source": "SongKhoeVaTamLy",
     "publishedAt": "2025-11-15T10:00:00Z",
     "url": "https://example.com/life_skills",
-    "imageUrl": "https://media.licdn.com/dms/image/v2/C5612AQE_Negd62G7NQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1638001008153?e=2147483647&v=beta&t=Ks0pB4sNlWGKUmr_eHeEycbzWoot-HTX2zn3bdUcBcE"
+    "imageUrl": "https://media.licdn.com/dms/image/v2/C5612AQE_Negd62G7NQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1638001008153?e=2147483647&v=beta&t=Ks0pB4sNlWGKUmr_eHeEycbzWoot-HTX2zn3bdUcBcE",
+    "like_count": 0
   },
   {
     "id" : 4,
@@ -49,7 +52,8 @@ articles = [
     "source": "TamLyOnline",
     "publishedAt": "2025-11-12T08:45:00Z",
     "url": "https://example.com/emotion_therapy",
-    "imageUrl": "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2021/10/10/roi-loan-lo-au-16338720814741611011911.jpg"
+    "imageUrl": "https://suckhoedoisong.qltns.mediacdn.vn/324455921873985536/2021/10/10/roi-loan-lo-au-16338720814741611011911.jpg",
+    "like_count": 0
   },
   {
     "id": 5,
@@ -62,7 +66,8 @@ articles = [
     "source": "SucKhoeToanDien",
     "publishedAt": "2025-12-01T11:00:00Z",
     "url": "https://example.com/sleep_hygiene",
-    "imageUrl": "https://media.suckhoecong.vn/thumb_x800x450/Images/Uploaded/Share/2019/03/05/mat-ngu-thieu-ngu-5-cach-don-gian-giup-cai-thien-chat-luong-giac-ngu11551772677.jpg"
+    "imageUrl": "https://media.suckhoecong.vn/thumb_x800x450/Images/Uploaded/Share/2019/03/05/mat-ngu-thieu-ngu-5-cach-don-gian-giup-cai-thien-chat-luong-giac-ngu11551772677.jpg",
+    "like_count": 0
   },
   {
     "id": 6,
@@ -75,7 +80,8 @@ articles = [
     "source": "CuocSongTuoiDep",
     "publishedAt": "2025-11-28T16:30:00Z",
     "url": "https://example.com/self_care_burnout",
-    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQmJlpX60cCMeygF0QYZoEtSknGVqmSmN6qA&s"
+    "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQmJlpX60cCMeygF0QYZoEtSknGVqmSmN6qA&s",
+    "like_count": 0
   },
   {
     "id": 7,
@@ -88,7 +94,8 @@ articles = [
     "source": "TinhYeuVaCuocSong",
     "publishedAt": "2025-11-25T13:45:00Z",
     "url": "https://example.com/mindfulness_beginner",
-    "imageUrl": "https://nacopharm.vn/wp-content/uploads/2021/01/thien-chanh-niem-co-gai-chap-tay-1024x683.jpg"
+    "imageUrl": "https://nacopharm.vn/wp-content/uploads/2021/01/thien-chanh-niem-co-gai-chap-tay-1024x683.jpg",
+    "like_count": 0
   },
   {
     "id": 8,
@@ -101,7 +108,8 @@ articles = [
     "source": "ChamSocTamLy",
     "publishedAt": "2025-11-22T09:15:00Z",
     "url": "https://example.com/healthy_relationships",
-    "imageUrl": "https://images.careerviet.vn/content/images/quan-he-xa-hoi-1.jpg"
+    "imageUrl": "https://images.careerviet.vn/content/images/quan-he-xa-hoi-1.jpg",
+    "like_count": 0
   },
   {
   "id": 9,
@@ -114,7 +122,8 @@ articles = [
   "source": "TamLyOnline",
   "publishedAt": "2025-12-02T08:30:00Z",
   "url": "https://example.com/manage_negative_emotions",
-  "imageUrl": "https://tamlynhc.vn/wp-content/uploads/2025/05/cach-quan-ly-cam-xuc-1.jpg"
+  "imageUrl": "https://tamlynhc.vn/wp-content/uploads/2025/05/cach-quan-ly-cam-xuc-1.jpg",
+  "like_count": 0
 },
 {
   "id": 10,
@@ -127,7 +136,8 @@ articles = [
   "source": "SucKhoeToanDien",
   "publishedAt": "2025-12-03T10:15:00Z",
   "url": "https://example.com/when_to_see_therapist",
-  "imageUrl": "https://mindfulcare.vn/wp-content/uploads/2024/03/tu-van-tam-ly-tai-hai-phong.jpg"
+  "imageUrl": "https://mindfulcare.vn/wp-content/uploads/2024/03/tu-van-tam-ly-tai-hai-phong.jpg",
+  "like_count": 0
 },
 {
   "id": 11,
@@ -140,7 +150,8 @@ articles = [
   "source": "SongKhoeVaTamLy",
   "publishedAt": "2025-12-01T15:00:00Z",
   "url": "https://example.com/student_stress",
-  "imageUrl": "https://tuyensinhdonga.edu.vn/wp-content/uploads/2021/05/ap-luc-hoc-tap.jpg"
+  "imageUrl": "https://tuyensinhdonga.edu.vn/wp-content/uploads/2021/05/ap-luc-hoc-tap.jpg",
+  "like_count": 0
 },
 {
   "id": 12,
@@ -153,7 +164,8 @@ articles = [
   "source": "CuocSongTuoiDep",
   "publishedAt": "2025-12-04T09:00:00Z",
   "url": "https://example.com/positive_habits",
-  "imageUrl": "https://behapyhealthy.com/wp-content/uploads/2024/10/clock-collage-header-154210441-3828-6458-1542104469.jpg"
+  "imageUrl": "https://behapyhealthy.com/wp-content/uploads/2024/10/clock-collage-header-154210441-3828-6458-1542104469.jpg",
+  "like_count": 0
 },
 {
   "id": 13,
@@ -166,9 +178,10 @@ articles = [
   "source": "TinhYeuVaCuocSong",
   "publishedAt": "2025-12-05T14:20:00Z",
   "url": "https://example.com/loneliness_modern_life",
-  "imageUrl": "https://vcdn1-giadinh.vnecdn.net/2020/04/11/Co-don-5992-1586601093.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=E8S2l1Ebr6XSmmnnKgf_8A"
-},
-{
+  "imageUrl": "https://vcdn1-giadinh.vnecdn.net/2020/04/11/Co-don-5992-1586601093.jpg?w=680&h=0&q=100&dpr=2&fit=crop&s=E8S2l1Ebr6XSmmnnKgf_8A",
+  "like_count": 0
+  },
+  {
   "id": 14,
   "title": "Cách xây dựng thói quen tích cực mỗi ngày",
   "description": "Những bước đơn giản giúp hình thành thói quen tốt cho sức khỏe tinh thần.",
@@ -179,8 +192,9 @@ articles = [
   "source": "CuocSongTuoiDep",
   "publishedAt": "2025-12-04T09:00:00Z",
   "url": "https://example.com/positive_habits",
-  "imageUrl": "https://behapyhealthy.com/wp-content/uploads/2024/10/clock-collage-header-154210441-3828-6458-1542104469.jpg"
-},
+  "imageUrl": "https://behapyhealthy.com/wp-content/uploads/2024/10/clock-collage-header-154210441-3828-6458-1542104469.jpg",
+  "like_count": 0
+  },
  {
     "id" : 15,
     "title": "5 kỹ năng sống giúp giảm stress",
@@ -192,6 +206,7 @@ articles = [
     "source": "SongKhoeVaTamLy",
     "publishedAt": "2025-11-15T10:00:00Z",
     "url": "https://example.com/life_skills",
-    "imageUrl": "https://media.licdn.com/dms/image/v2/C5612AQE_Negd62G7NQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1638001008153?e=2147483647&v=beta&t=Ks0pB4sNlWGKUmr_eHeEycbzWoot-HTX2zn3bdUcBcE"
+    "imageUrl": "https://media.licdn.com/dms/image/v2/C5612AQE_Negd62G7NQ/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1638001008153?e=2147483647&v=beta&t=Ks0pB4sNlWGKUmr_eHeEycbzWoot-HTX2zn3bdUcBcE",
+    "like_count": 0
   },
 ]

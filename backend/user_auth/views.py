@@ -116,13 +116,13 @@ class UserViewSet(viewsets.ViewSet):
         password = data.get('password', None)
 
         if not email or not password:
-            return Response({"message": "Email và mật khẩu không được để trống"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "Email và mật khẩu không được để trống"}, status=status.HTTP_401_UNAUTHORIZED)
         
         try:
             user_info = self._firebase_signin(email, password)
             return Response({"user": user_info}, status=status.HTTP_200_OK)
         except Exception as e:
-            return Response({"message": 'Email hoặc mật khẩu không đúng'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": 'Email hoặc mật khẩu không đúng'}, status=status.HTTP_401_UNAUTHORIZED)
         
     @action(detail= False, methods=['post'])    
     def google_signin(self,request):

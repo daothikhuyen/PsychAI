@@ -19,17 +19,19 @@ class TopicCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                imageUrl,
-                width: double.infinity,
-                height: 100,
-                fit: BoxFit.cover,
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: Image.asset(
+                  imageUrl,
+                  width: double.infinity,
+                  height: 100,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(height: 10),

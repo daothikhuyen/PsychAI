@@ -12,6 +12,9 @@ class PredictTextField extends StatelessWidget {
     this.obscureText = false,
     this.validator,
     this.controller,
+    this.color = AppColors.greyscale0,
+    this.border = 30,
+    this.size,
   });
   final String hint;
   final IconData prefixIcon;
@@ -21,40 +24,49 @@ class PredictTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextEditingController? controller;
   final FocusNode? focusNode;
+  final Color? color;
+  final double border;
+  final double? size;
 
   InputDecoration _buildDecoration() {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(
-        color: Colors.white,
+      hintStyle: TextStyle(
+        color: color,
         fontSize: 16,
         fontWeight: FontWeight.w600,
       ),
 
-      prefixIcon: Icon(prefixIcon, color: Colors.white, size: 22),
+      prefixIcon: Icon(prefixIcon, color: color, size: 22),
 
       suffixIcon: suffixIcon,
 
       filled: true,
-      fillColor: Colors.white.withValues(alpha: 0),
+      fillColor: Colors.transparent,
 
-      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 25),
+      contentPadding: EdgeInsets.symmetric(
+        vertical: size ?? 18,
+        horizontal: size ?? 25,
+      ),
 
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colors.white, width: 1.5),
+        borderRadius: BorderRadius.circular(border),
+        borderSide: BorderSide(
+          color: color ?? AppColors.greyscale0,
+          width: 1.5,
+        ),
       ),
 
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(color: Colors.white),
+        borderRadius: BorderRadius.circular(border),
+        borderSide: BorderSide(color: color ?? AppColors.greyscale0),
       ),
 
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(30),
-        borderSide: const BorderSide(
-          color: Color.fromARGB(255, 176, 217, 230),
-          width: 5,
+        borderRadius: BorderRadius.circular(border),
+        borderSide: BorderSide(
+          color: color ?? const Color.fromARGB(255, 176, 217, 230),
+          width: 1.01,
         ),
       ),
 

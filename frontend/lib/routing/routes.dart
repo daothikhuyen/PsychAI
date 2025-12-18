@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/data/model/article.dart';
+import 'package:frontend/features/articles/articles_detail_screen.dart';
+import 'package:frontend/features/articles/articles_screen.dart';
+import 'package:frontend/features/articles/controller/article_controller.dart';
 import 'package:frontend/features/auth/center_auth_screen.dart';
 import 'package:frontend/features/auth/controller/auth_controller.dart';
 import 'package:frontend/features/auth/sign_in_screen.dart';
@@ -10,10 +14,11 @@ import 'package:frontend/features/exam_dass21/exam_dass21_screen.dart';
 import 'package:frontend/features/home/controller/home_controller.dart';
 import 'package:frontend/features/home/home_screen.dart';
 import 'package:frontend/features/layout/layout_scaffold.dart';
-import 'package:frontend/features/news/news_screen.dart';
 import 'package:frontend/features/profile/profile_screen.dart';
 import 'package:frontend/features/test_emtion/controller/test_emotion_controller.dart';
 import 'package:frontend/features/test_emtion/test_emotion_screen.dart';
+import 'package:frontend/features/topic_article/controller/topic_article_controller.dart';
+import 'package:frontend/features/topic_article/topic_screen.dart';
 import 'package:frontend/routing/animation.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -97,6 +102,40 @@ final goRouter = GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: PageRoutes.listArticles,
+      pageBuilder: (context, state) {
+        final data = state.extra! as Map<String, dynamic>;
+        final nameTopic = data['nameTopic'] as String;
+        final listArticles = data['articles'] as List<Article>;
+        return animationRouter(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => TopicArticleController()),
+              ChangeNotifierProvider(create: (_) => ArticleController()),
+            ],
+            child: TopicScreen(topic: nameTopic, listArticles: listArticles),
+          ),
+          state,
+        );
+      },
+    ),
+    GoRoute(
+      path: PageRoutes.detailArticle,
+      pageBuilder: (context, state) {
+        final data = state.extra! as Article;
+        return animationRouter(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (_) => TopicArticleController()),
+              ChangeNotifierProvider(create: (_) => ArticleController()),
+            ],
+            child: ArticlesDetailScreen(article: data),
+          ),
+          state,
+        );
+      },
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return LayoutScaffold(navigationShell: navigationShell);
@@ -120,20 +159,32 @@ final goRouter = GoRouter(
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: PageRoutes.chat,
+              path: PageRoutes.articles,
               pageBuilder:
-                  (context, state) =>
-                      animationRouter(const NewsScreen(), state),
+                  (context, state) => animationRouter(
+                    MultiProvider(
+                      providers: [
+                        ChangeNotifierProvider(
+                          create: (_) => TopicArticleController(),
+                        ),
+                        ChangeNotifierProvider(
+                          create: (_) => ArticleController(),
+                        ),
+                      ],
+                      child: const ArticlesScreen(),
+                    ),
+                    state,
+                  ),
             ),
           ],
         ),
         StatefulShellBranch(
           routes: [
             GoRoute(
-              path: PageRoutes.news,
+              path: PageRoutes.chat,
               pageBuilder:
                   (context, state) =>
-                      animationRouter(const NewsScreen(), state),
+                      animationRouter(const ArticlesScreen(), state),
             ),
           ],
         ),

@@ -33,14 +33,37 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
         except Exception as e:
             traceback.print_exc()
             return Response({"error": str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def attach_liked(self,articles, like_ids, save_ids):
+        for article in articles :
+            article['liked'] = article['id'] in like_ids
+            article['saved'] = article['id'] in save_ids
+
+        return articles
+
+    def get_like_article_ids(self,user_id):
+        likes = db.collection('article_like')\
+                .where('user_id', '==', user_id)\
+                .stream()
+        return {doc.to_dict()['article_id'] for doc in likes}
+    
+    def get_save_article_ids(self, user_id):
+        saves = db.collection('article_save')\
+                .where('user_id','==', user_id)\
+                .stream()
+        return {doc.to_dict()['article_id'] for doc in saves}
     
     @action(detail=True, methods=['get'])
     def list_by_topic(self, request, pk=None):
+        user = request.user
         try:
-            
             doc_ref = db.collection('articles')
             col_ref = doc_ref.where('topic_id', '==', int(pk)).stream()
             articles = [serialize_doc(doc) for doc in col_ref]
+
+            liked_ids = self.get_like_article_ids(user.uid)
+            saved_ids = self.get_save_article_ids(user.uid)
+            articles = self.attach_liked(articles, liked_ids, saved_ids)
 
             if articles: 
                 return Response({"result": articles}, status=status.HTTP_200_OK)
@@ -49,51 +72,88 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
         except Exception as e:
             traceback.print_exc()
             return Response({"error": str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    # Extract the article with the highest number of like
+    @action(detail=False, methods=['get'])
+    def top_article_like(self,request):
+        user = request.user
+        try:
+            top_ref = db.collection('articles')\
+                    .order_by('like_count', direction = firestore.Query.DESCENDING)\
+                    .limit(1)\
+                    .stream()
+        
+            top_articles = [serialize_doc(doc) for doc in top_ref]
+            liked_ids = self.get_like_article_ids(user.uid)
+            saved_ids = self.get_save_article_ids(user.uid)
+            top_articles = self.attach_liked(top_articles, liked_ids, saved_ids)
+
+            if not top_articles:
+                return Response({"error": "Dữ liệu không có"}, status=status.HTTP_404_NOT_FOUND)
+            
+            return Response({"result": top_articles}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=False, methods=['get'])
     def search(self, request):
+        user = request.user
         query_text = request.query_params.get('q', '').strip()
         if not query_text:
              return Response({"error": "Vui lòng nhập từ khóa tìm kiếm"}, status=status.HTTP_400_BAD_REQUEST)
         
         try:
             title_ref = db.collection('articles')
-            title_query = title_ref.where("title", ">=", query_text).where("title", "<=", query_text).stream()
+            title_query = title_ref.order_by('title')\
+                .start_at([query_text])\
+                .end_at([query_text + u'\uf8ff'])\
+                .limit(20)\
+                .stream()
             title_results = [doc.to_dict() for doc in title_query]
 
             tag_ref = db.collection('articles')
-            tag_query = tag_ref.where("tags", "array_contains", query_text).stream()
+            tag_query = tag_ref.order_by('tags')\
+                .start_at([query_text])\
+                .end_at([query_text + u'\uf8ff'])\
+                .limit(20)\
+                .stream()
             tag_results = [doc.to_dict() for doc in tag_query]
 
             results_dict = {a['id']: a for a in title_results + tag_results}
             results = list(results_dict.values()) 
+            
+            liked_ids = self.get_like_article_ids(user.uid)
+            saved_ids = self.get_save_article_ids(user.uid)
+            result_search = self.attach_liked(results, liked_ids, saved_ids)
 
-            return Response({"results": results}, status=status.HTTP_200_OK)
+            return Response({"result": result_search}, status=status.HTTP_200_OK)
         
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def update_like_count(self, article_id, change):
         
-    def count_like(self, article_id):
-        count_query = db.collection('article_like') \
-                    .where('article_id', '==', article_id) \
-                    .stream()
-        likes_count = sum(1 for _ in count_query)
-        return likes_count
+        if not article_id: return
+        try:
+            print('hi')
+            article_ref = db.collection('articles').document(str(article_id))
+            article_ref.update({
+                'like_count' : firestore.Increment(change)
+            })
+        except Exception as e:
+            raise e
 
-    def like(self, request):
+    @action(detail=True, methods=['post'])
+    def toggle_like(self, request, pk=None):
         user = request.user
-        data = request.data
-
-        if not data:
-            return Response({"error": "Dữ liệu không hợp lệ"}, status=status.HTTP_400_BAD_REQUEST)
-
-        article_id = data.get('article_id')
+        article_id = int(pk)
 
         try:
             like_query = db.collection('article_like') \
                             .where('user_id', '==', user.uid) \
                             .where('article_id', '==', article_id) \
-                            .limit(1) \
+                            .limit(1)\
                             .stream()
 
             existing_like = None
@@ -108,44 +168,91 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
                     "article_id": article_id,
                     "created_at": firestore.SERVER_TIMESTAMP
                 })
-
-                likes_count = self.count_like(article_id)
+                
+                self.update_like_count(article_id, 1)
 
                 result = Response({
-                    "liked": True,
-                    "likes_count": likes_count
+                    "liked": True
                 }, status=status.HTTP_200_OK)
 
             else:
                 db.collection('article_like').document(existing_like.id).delete()
-
-                likes_count = self.count_like(article_id)
+                self.update_like_count(article_id, -1)
 
                 result = Response({
                     "liked": False,
-                    "likes_count": likes_count
                 }, status=status.HTTP_200_OK)
 
             return result
 
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    def save_hobby(self, request):
+    
+    @action(detail=True, methods=['post'])
+    def toggle_save(self, request, pk=None):
         user = request.user
-        data = request.data
 
-        if not data:
-            return Response({"error": "Dữ liệu không hợp lệ"}, status=status.HTTP_400_BAD_REQUEST)
-
-        article_id = data.get('article_id')
+        article_id = int(pk)
 
         try:
-            doc_ref = db.collection('article_save').document()     
-            doc_ref.set({
-                "user_id" : user.uid,
-                "article_id": article_id,
-                "created_at": firestore.SERVER_TIMESTAMP
-            })
+            save_query = db.collection('article_save') \
+                .where('user_id', '==', user.uid) \
+                .where('article_id', '==', article_id) \
+                .limit(1)\
+                .stream()
+                       
+            existing_save = None
+            for doc in save_query:
+                existing_save = doc
+                break
+
+            if existing_save is None:
+                new_doc_ref = db.collection('article_save').document()
+                new_doc_ref.set({
+                    "user_id": user.uid,
+                    "article_id": article_id,
+                    "created_at": firestore.SERVER_TIMESTAMP
+                })
+
+                result = Response({
+                    "save": True
+                }, status=status.HTTP_200_OK)
+
+            else:
+                db.collection('article_save').document(existing_save.id).delete()
+
+                result = Response({
+                    "save": False,
+                }, status=status.HTTP_200_OK)
+
+            return result
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(detail=True, methods=['GET'])
+    def get_recommended_articles(self, request, pk=None):
+        user = request.user
+        try:
+            article_id = str(pk)
+            doc_ref = db.collection('articles')
+            current_doc = doc_ref.document(article_id).get().to_dict()
+            current_tags = set(current_doc['tags'])
+
+            all_articles = doc_ref.stream()
+            recommendations = []
+
+            for doc in all_articles:
+                data = doc.to_dict()
+                if str(data['id']) == article_id: 
+                    continue
+                if current_tags.intersection(set(data['tags'])):
+                    recommendations.append(data)
+            
+            liked_ids = self.get_like_article_ids(user.uid)
+            saved_ids = self.get_save_article_ids(user.uid)
+            propose_articles = self.attach_liked(recommendations[:5], liked_ids, saved_ids)
+    
+            return Response({"result": propose_articles }, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+ 

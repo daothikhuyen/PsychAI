@@ -121,14 +121,17 @@ class BaseApi {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return body;
       } else {
-        if (response.statusCode == 401 || response.statusCode == 403) {
+        if (response.statusCode == 403) {
           await authController.clearUser();
           final navContext = navigatorKey.currentContext;
           if (navContext != null) {
             GoRouter.of(navContext).go(PageRoutes.auth);
           }
         }
-        throw ApiException(message: body['error'], code: response.statusCode);
+        throw ApiException(
+          message: body['error'] ?? 'Có lỗi xảy ra',
+          code: response.statusCode,
+        );
       }
     }
   }

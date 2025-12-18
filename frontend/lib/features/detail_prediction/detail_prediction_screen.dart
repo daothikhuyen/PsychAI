@@ -4,6 +4,7 @@ import 'package:frontend/core/uitls/format.dart';
 import 'package:frontend/core/widgets/devider.dart';
 import 'package:frontend/data/model/dass21_result.dart';
 import 'package:frontend/data/model/predictions.dart';
+import 'package:frontend/features/detail_prediction/utils/advice_overall.dart';
 import 'package:frontend/features/detail_prediction/widget/detail_row.dart';
 import 'package:frontend/features/detail_prediction/widget/score_row.dart';
 import 'package:frontend/features/detail_prediction/widget/section_title.dart';
@@ -133,11 +134,10 @@ class DetailPredictionScreen extends StatelessWidget {
             const SectionTitle(title: 'Kết luận:'),
             const SizedBox(height: 10),
 
-            const Text(
-              'Cảm xúc của bạn hiện chưa tốt lắm, nên theo '
-              'dõi thêm về cảm xúc và giấc ngủ.',
+            Text(
+              classifyDass21(resultTest,prediction.finalEmotion),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 color: Color.fromARGB(255, 8, 174, 41),

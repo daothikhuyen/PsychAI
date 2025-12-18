@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/data/model/article.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
 
 class CardArticlesSugesstion extends StatelessWidget {
-  const CardArticlesSugesstion({
-    required this.id, required this.title, required this.imageUrl, super.key,
-  });
+  const CardArticlesSugesstion({required this.article, super.key});
 
-  final String id;
-  final String title;
-  final String imageUrl;
+  final Article article;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        
-      },
+      onTap: () => context.push(PageRoutes.detailArticle, extra: article),
       child: SizedBox(
         width: 140,
         child: Column(
@@ -23,7 +20,7 @@ class CardArticlesSugesstion extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Image.network(
-                imageUrl,
+                article.imageUrl,
                 height: 80,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -31,10 +28,10 @@ class CardArticlesSugesstion extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              title,
+              article.title,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
             ),
           ],
         ),

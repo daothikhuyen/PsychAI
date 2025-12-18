@@ -14,5 +14,7 @@ class PageRoutes {
   static const String personalInfo = '/personalInfo';
   static const String search = '/search';
   static const String chat = '/chat';
-  static const String news = '/news';
+  static const String articles = '/articles';
+  static const String listArticles = '/listArticles';
+  static const String detailArticle = '/detailArticle';
 }
