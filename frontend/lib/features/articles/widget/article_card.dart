@@ -10,7 +10,7 @@ class ArticleCard extends StatelessWidget {
   final Article article;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return  GestureDetector(
       onTap:() => context.push(PageRoutes.detailArticle, extra: article),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +57,7 @@ class ArticleCard extends StatelessWidget {
                 fontStyle: FontStyle.italic,
               ),
             ),
-          const SizedBox(height: 15),
+          // const SizedBox(height: 15),
         ],
       ),
     );

@@ -7,21 +7,23 @@ class GeminiService {
 
   Future<String> generateReply(String userInput) async {
     final url =
-      'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey';
+        'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=$apiKey';
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'contents': [
         {
           'parts': [
-            {'text': userInput}
-          ]
-        }
-      ]
+            {'text': userInput},
+          ],
+        },
+      ],
     });
 
     final response = await http.post(
-      Uri.parse(url), headers: headers, body: body
-      );
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);

@@ -21,7 +21,7 @@ class SignInScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
             color: Color(0xFF0A4F6A),
             size: 28,
           ),
@@ -43,18 +43,25 @@ class SignInScreen extends StatelessWidget {
   }
 }
 
-class SignInContent extends StatelessWidget {
+class SignInContent extends StatefulWidget {
   const SignInContent({super.key});
 
   @override
+  State<SignInContent> createState() => _SignInContentState();
+}
+
+class _SignInContentState extends State<SignInContent> {
+   final formKey = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
     final authController = Provider.of<AuthController>(context);
+    
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(24, 2, 24, 20),
         child: SingleChildScrollView(
           child: Form(
-            key: authController.formKey,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -143,7 +150,7 @@ class SignInContent extends StatelessWidget {
                 const SizedBox(height: 20),
           
                 ElevatedButton(
-                  onPressed: () => authController.signIn(context),
+                  onPressed: () => authController.signIn(context, formKey),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary300,
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -178,7 +185,7 @@ class SignInContent extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => context.go(PageRoutes.signUp),
+                      onTap: () => context.push(PageRoutes.signUp),
                       child: const Text(
                         'Đăng ký',
                         style: TextStyle(

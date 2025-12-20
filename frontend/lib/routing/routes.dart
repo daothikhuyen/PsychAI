@@ -7,6 +7,7 @@ import 'package:frontend/features/auth/center_auth_screen.dart';
 import 'package:frontend/features/auth/controller/auth_controller.dart';
 import 'package:frontend/features/auth/sign_in_screen.dart';
 import 'package:frontend/features/auth/sign_up_screen.dart';
+import 'package:frontend/features/chatbot/chatbot_screen.dart';
 import 'package:frontend/features/detail_prediction/detail_prediction_screen.dart';
 import 'package:frontend/features/exam_dass21/controller/exam_dass21_controller.dart';
 import 'package:frontend/features/exam_dass21/exam_conclusion_screen.dart';
@@ -14,7 +15,11 @@ import 'package:frontend/features/exam_dass21/exam_dass21_screen.dart';
 import 'package:frontend/features/home/controller/home_controller.dart';
 import 'package:frontend/features/home/home_screen.dart';
 import 'package:frontend/features/layout/layout_scaffold.dart';
+import 'package:frontend/features/profile/controller/profile_controller.dart';
 import 'package:frontend/features/profile/profile_screen.dart';
+import 'package:frontend/features/profile/section/account_screen.dart';
+import 'package:frontend/features/profile/section/feedback_screen.dart';
+import 'package:frontend/features/profile/section/save_articles_screen.dart';
 import 'package:frontend/features/test_emtion/controller/test_emotion_controller.dart';
 import 'package:frontend/features/test_emtion/test_emotion_screen.dart';
 import 'package:frontend/features/topic_article/controller/topic_article_controller.dart';
@@ -136,6 +141,39 @@ final goRouter = GoRouter(
         );
       },
     ),
+    GoRoute(
+      path: PageRoutes.feedback,
+      pageBuilder:
+          (context, state) => animationRouter(
+            ChangeNotifierProvider(
+              create: (context) => ProfileController(),
+              child: const FeedbackScreen(),
+            ),
+            state,
+          ),
+    ),
+    GoRoute(
+      path: PageRoutes.updateProfile,
+      pageBuilder:
+          (context, state) => animationRouter(
+            ChangeNotifierProvider(
+              create: (context) => ProfileController(),
+              child: const AccountScreen(),
+            ),
+            state,
+          ),
+    ),
+    GoRoute(
+      path: PageRoutes.tabSaveAndLike,
+      pageBuilder:
+          (context, state) => animationRouter(
+            ChangeNotifierProvider(
+              create: (context) => ArticleController(),
+              child: const SavedArticlesScreen(),
+            ),
+            state,
+          ),
+    ),
     StatefulShellRoute.indexedStack(
       builder: (context, state, navigationShell) {
         return LayoutScaffold(navigationShell: navigationShell);
@@ -183,8 +221,13 @@ final goRouter = GoRouter(
             GoRoute(
               path: PageRoutes.chat,
               pageBuilder:
-                  (context, state) =>
-                      animationRouter(const ArticlesScreen(), state),
+                  (context, state) => animationRouter(
+                    ChangeNotifierProvider(
+                      create: (context) => ProfileController(),
+                      child: const ChatBotScreen(),
+                    ),
+                    state,
+                  ),
             ),
           ],
         ),

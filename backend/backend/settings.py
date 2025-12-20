@@ -45,10 +45,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'predict',
     'user_auth',
+    'user',
     'psych_test',
     'articles',
     'topic',
-    'collector'
+    'collector',
+    'recommender',
 ]
 
 MIDDLEWARE = [
@@ -140,4 +142,11 @@ cred = credentials.Certificate(str(FIREBASE_CRED_PATH))
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 FIRESTORE_DB = firestore.client()
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'daothikhuyen30@gmail.com'
+EMAIL_HOST_PASSWORD = 'mnma yeco ogun jscj'
 

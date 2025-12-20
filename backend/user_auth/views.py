@@ -92,7 +92,6 @@ class UserViewSet(viewsets.ViewSet):
         password = data['password']
 
         try:
-            print('email: ', email)
             if self.check_user_exists(email):
                 return Response({"message": "Tài khoản đã tồn tại"}, status=status.HTTP_400_BAD_REQUEST)
 

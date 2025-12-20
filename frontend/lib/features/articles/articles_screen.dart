@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/app_colors.dart';
 import 'package:frontend/core/widgets/textfield.dart';
-import 'package:frontend/features/articles/articles_data.dart';
 import 'package:frontend/features/articles/controller/article_controller.dart';
 import 'package:frontend/features/articles/widget/article_card.dart';
 import 'package:frontend/features/articles/widget/highlight/highlight_card.dart';
@@ -33,6 +32,7 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<ArticleController>().getTopArticle(context);
       context.read<TopicArticleController>().getTopics(context);
+      context.read<ArticleController>().getRecommenderArticles(context);
     });
 
     search.addListener(() {
@@ -50,9 +50,6 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
   @override
   Widget build(BuildContext context) {
     final articleController = Provider.of<ArticleController>(context);
-    final article1 = articles.firstWhere((a) => a['id'] == 1);
-    final article3 = articles.firstWhere((a) => a['id'] == 3);
-    final article4 = articles.firstWhere((a) => a['id'] == 4);
 
     return Scaffold(
       appBar: AppBar(
@@ -69,15 +66,15 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
           icon: const Icon(Icons.arrow_back_ios_new),
           iconSize: 26,
           color: AppColors.greyscale800,
-          onPressed: () => context.pop(PageRoutes.homePage),
+          onPressed: () => context.go(PageRoutes.homePage),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: IconButton(
-              onPressed: () => context.pop(PageRoutes.homePage),
+              onPressed: () => context.go(PageRoutes.homePage),
               icon: const Icon(
-                Icons.home,
+                Icons.home_outlined,
                 color: AppColors.greyscale800,
                 size: 28,
               ),
@@ -157,36 +154,58 @@ class _ArticlesScreenState extends State<ArticlesScreen> {
                               duration: const Duration(seconds: 4),
                               interval: const Duration(seconds: 5),
                               colorOpacity: 1,
-                              child: const Skeleton(),
+                              child: const SizedBox(
+                                height: 100,
+                                child: Skeleton(),
+                              ),
                             ),
                           const SizedBox(width: 16),
                           Expanded(
                             flex: 2,
                             child: Column(
                               children: [
-                                SmallHighlightCard(
-                                  title: article1['title'],
-                                  // ignore: avoid_dynamic_calls
-                                  tag: article1['tags'][0],
-                                  imageUrl: article1['imageUrl'],
-                                  onTap: () {},
-                                ),
-                                const SizedBox(height: 16),
-                                SmallHighlightCard(
-                                  title: article3['title'],
-                                  // ignore: avoid_dynamic_calls
-                                  tag: article3['tags'][0],
-                                  imageUrl: article3['imageUrl'],
-                                  onTap: () {},
-                                ),
-                                const SizedBox(height: 16),
-                                SmallHighlightCard(
-                                  title: article4['title'],
-                                  // ignore: avoid_dynamic_calls
-                                  tag: article4['tags'][0],
-                                  imageUrl: article4['imageUrl'],
-                                  onTap: () {},
-                                ),
+                                if (articleController
+                                    .listRecommender
+                                    .isNotEmpty)
+                                  ...articleController.listRecommender.map((e) {
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 16,
+                                      ),
+                                      child: SmallHighlightCard(
+                                        title: e.title,
+                                        tag:
+                                            e.tags.isNotEmpty
+                                                ? e.tags[0]
+                                                : 'Khác',
+                                        imageUrl: e.imageUrl,
+                                        onTap:
+                                            () => context.push(
+                                              PageRoutes.detailArticle,
+                                              extra: e,
+                                            ),
+                                      ),
+                                    );
+                                  })
+                                else
+                                  Shimmer(
+                                    duration: const Duration(seconds: 4),
+                                    interval: const Duration(seconds: 5),
+                                    colorOpacity: 1,
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: 3,
+                                      itemBuilder: (context, index) {
+                                        return const Padding(
+                                          padding: EdgeInsets.only(bottom: 16),
+                                          child: SizedBox(
+                                            height: 80,
+                                            child: Skeleton(),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                               ],
                             ),
                           ),

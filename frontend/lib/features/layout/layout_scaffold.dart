@@ -29,8 +29,10 @@ class _LayoutScaffoldState extends State<LayoutScaffold> {
       body: widget.navigationShell,
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.push(PageRoutes.testPsych),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         backgroundColor: AppColors.primary700,
-        elevation: 2,
+        elevation: 1,
+
         child: const Icon(
           Icons.add,
           color: Colors.white,

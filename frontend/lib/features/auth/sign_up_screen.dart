@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/themes/app_colors.dart';
+import 'package:frontend/core/uitls/format.dart';
 import 'package:frontend/core/widgets/textfield.dart';
 import 'package:frontend/features/auth/controller/auth_controller.dart';
 import 'package:frontend/features/auth/utils/validators.dart';
@@ -21,7 +22,7 @@ class SignUpScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios,
             color: Color(0xFF0A4F6A),
             size: 28,
           ),
@@ -43,9 +44,16 @@ class SignUpScreen extends StatelessWidget {
   }
 }
 
-class SignUpContent extends StatelessWidget {
+class SignUpContent extends StatefulWidget {
   const SignUpContent({super.key});
 
+  @override
+  State<SignUpContent> createState() => _SignUpContentState();
+}
+
+class _SignUpContentState extends State<SignUpContent> {
+  final formKey = GlobalKey<FormState>();
+  
   @override
   Widget build(BuildContext context) {
     final authController = Provider.of<AuthController>(context);
@@ -55,7 +63,7 @@ class SignUpContent extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 10),
         child: SingleChildScrollView(
           child: Form(
-            key: authController.formKey,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -148,7 +156,7 @@ class SignUpContent extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () => authController.signUp(context),
+                  onPressed: () => authController.signUp(context, formKey),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary300,
                     padding: const EdgeInsets.symmetric(vertical: 16),

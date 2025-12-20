@@ -1,99 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/core/constants.dart';
-import 'package:frontend/features/profile/about_screen.dart';
-import 'package:frontend/features/profile/account_screen.dart';
-import 'package:frontend/features/profile/feedback_screen.dart';
-import 'package:frontend/features/profile/save_articles_screen.dart';
-import 'package:frontend/features/profile/support_screen.dart';
+import 'package:frontend/core/themes/app_colors.dart';
+import 'package:frontend/features/auth/controller/auth_controller.dart';
+import 'package:frontend/features/profile/section/about_screen.dart';
+import 'package:frontend/features/profile/section/support_screen.dart';
+import 'package:frontend/features/profile/widget/dialog_profile.dart';
+import 'package:frontend/features/profile/widget/profile_item.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
-  void _returnToHome(BuildContext context) {
-    Navigator.of(context).popUntil((route) => route.isFirst);
-  }
-
-  void _showLogoutConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 24,
-            vertical: 32,
-          ),
-          content: SizedBox(
-            width: 320,
-            height: 210,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.help_outline, color: primaryColor, size: 50),
-                const SizedBox(height: 16),
-                const Text(
-                  'Bạn đã chắc chắn?',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                const Text(
-                  'Bạn có muốn đăng xuất không?',
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 24),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.red.shade400,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text(
-                        'Đăng xuất',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: TextButton.styleFrom(
-                        foregroundColor: primaryColor,
-                        backgroundColor: Colors.grey.shade200,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
-                      child: const Text('Hủy', style: TextStyle(fontSize: 18)),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<AuthController>(context);
+    final user = controller.currentUser;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -101,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
         elevation: 0.5,
         title: const Text('Cá nhân'),
         titleTextStyle: const TextStyle(
-          color: primaryColor,
+          color: AppColors.greyscale800,
           fontSize: 22,
           fontWeight: FontWeight.w600,
         ),
@@ -110,17 +34,17 @@ class ProfileScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           iconSize: 22,
-          color: primaryColor,
-          onPressed: () => Navigator.maybePop(context),
+          color: AppColors.greyscale800,
+          onPressed: () => context.go(PageRoutes.homePage),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: IconButton(
-              onPressed: () => _returnToHome(context),
+              onPressed: () => context.go(PageRoutes.homePage),
               icon: const Icon(
                 Icons.home_outlined,
-                color: primaryColor,
+                color: AppColors.greyscale800,
                 size: 28,
               ),
             ),
@@ -143,19 +67,19 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'My Khuyenn',
-                        style: TextStyle(
+                        user?.displayName?? 'Cập nhập...',
+                        style: const TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      SizedBox(height: 5),
-                      Text(
+                      const SizedBox(height: 5),
+                      const Text(
                         'Sức khỏe là vàng',
                         style: TextStyle(
                           fontWeight: FontWeight.w400,
@@ -171,8 +95,7 @@ class ProfileScreen extends StatelessWidget {
                     color: primaryColor,
                     size: 30,
                   ),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                 ),
               ],
             ),
@@ -181,17 +104,16 @@ class ProfileScreen extends StatelessWidget {
             const Text(
               'Hồ Sơ',
               style: TextStyle(
-                color: primaryColor,
+                color: AppColors.greyscale800,
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 12),
 
-            _buildProfileItem(
-              context,
-              Icons.info_outline,
-              'Giới thiệu',
+            ProfileItem(
+              icon: Icons.info_outline,
+              title: 'Giới thiệu',
               onTap: () {
                 Navigator.push(
                   context,
@@ -199,23 +121,14 @@ class ProfileScreen extends StatelessWidget {
                 );
               },
             ),
-            _buildProfileItem(
-              context,
-              Icons.bookmark_outline,
-              'Đã lưu',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SavedArticlesScreen(),
-                  ),
-                );
-              },
+            ProfileItem(
+              icon: Icons.bookmark_outline,
+              title: 'Đã lưu',
+              onTap: () => context.push(PageRoutes.tabSaveAndLike),
             ),
-            _buildProfileItem(
-              context,
-              Icons.notifications_none,
-              'Bạn cần giúp đỡ',
+            ProfileItem(
+              icon: Icons.notifications_none,
+              title: 'Bạn cần giúp đỡ',
               onTap: () {
                 Navigator.push(
                   context,
@@ -225,35 +138,23 @@ class ProfileScreen extends StatelessWidget {
                 );
               },
             ),
-            _buildProfileItem(
-              context,
-              Icons.person_outline,
-              'Tài khoản cá nhân',
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AccountScreen()),
-                );
-              },
+            ProfileItem(
+              icon: Icons.person_outline,
+              title: 'Tài khoản cá nhân',
+              onTap: () => context.push(PageRoutes.updateProfile),
             ),
-            _buildProfileItem(
-              context,
-              Icons.help_outline,
-              'Gửi phản hồi',
+            ProfileItem(
+              icon: Icons.help_outline,
+              title: 'Gửi phản hồi',
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const FeedbackScreen(),
-                  ),
-                );
+                context.push(PageRoutes.feedback);
               },
             ),
 
             const SizedBox(height: 20),
             Center(
               child: InkWell(
-                onTap: () => _showLogoutConfirmation(context),
+                onTap: () => PredictDialog().showLogoutConfirmation(context),
                 borderRadius: BorderRadius.circular(8),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -271,36 +172,6 @@ class ProfileScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildProfileItem(
-    BuildContext context,
-    IconData icon,
-    String title, {
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      leading: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          // ignore: deprecated_member_use
-          color: primaryColor.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Icon(icon, color: primaryColor, size: 22),
-      ),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-      ),
-      trailing: const Icon(
-        Icons.arrow_forward_ios,
-        size: 14,
-        color: Colors.grey,
-      ),
-      contentPadding: const EdgeInsets.symmetric(vertical: 4),
-      onTap: onTap ?? () {},
     );
   }
 }

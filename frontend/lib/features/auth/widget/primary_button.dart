@@ -9,6 +9,7 @@ class PrimaryButton extends StatelessWidget {
     super.key,
     this.icon,
     this.imageIconPath,
+    this.border,
   });
   final String text;
   final VoidCallback onPressed;
@@ -16,6 +17,7 @@ class PrimaryButton extends StatelessWidget {
   final Color textColor;
   final IconData? icon;
   final String? imageIconPath;
+  final double? border;
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +27,15 @@ class PrimaryButton extends StatelessWidget {
         backgroundColor: backgroundColor,
         foregroundColor: textColor,
         side: BorderSide(
-          color: Colors.white.withValues(alpha: 0.5),
-          width: 1.5,
+          color:
+              border != null
+                  ? const Color.fromARGB(255, 59, 160, 197)
+                  : Colors.white.withValues(alpha: 0.5),
+          width: 1.01,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(border ?? 30),
+        ),
         padding: const EdgeInsets.symmetric(vertical: 16),
         minimumSize: const Size(double.infinity, 50),
       ),

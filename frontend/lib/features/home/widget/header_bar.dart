@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:frontend/core/themes/app_colors.dart';
 
 class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
   const HeaderBar({super.key, this.username, this.avatarUrl});
@@ -26,7 +24,15 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: AssetImage(avatarUrl ?? 'assets/images/user.jpg'),
+                image:
+                    avatarUrl != null && avatarUrl!.startsWith('http')
+                        ? NetworkImage(avatarUrl!)
+                        : AssetImage(
+                              (avatarUrl?.isNotEmpty ?? false)
+                                  ? avatarUrl!
+                                  : 'assets/images/user.jpg',
+                            )
+                            as ImageProvider,
                 fit: BoxFit.cover,
               ),
             ),
@@ -35,31 +41,28 @@ class HeaderBar extends StatelessWidget implements PreferredSizeWidget {
         titleSpacing: 18,
         title: Text(
           username ?? 'Cập nhập....',
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 18,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
         ),
-        actions: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: AppColors.greyscale200),
-              shape: BoxShape.circle,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: GestureDetector(
-                onTap: () {},
-                child: SvgPicture.asset(
-                  'assets/icons/Search.svg',
-                  width: 20,
-                  height: 20,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 20),
-        ],
+        // actions: [
+        //   Container(
+        //     decoration: BoxDecoration(
+        //       border: Border.all(color: AppColors.greyscale200),
+        //       shape: BoxShape.circle,
+        //     ),
+        //     child: Padding(
+        //       padding: const EdgeInsets.all(8),
+        //       child: GestureDetector(
+        //         onTap: () {},
+        //         child: SvgPicture.asset(
+        //           'assets/icons/Search.svg',
+        //           width: 20,
+        //           height: 20,
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        //   const SizedBox(width: 20),
+        // ],
       ),
     );
   }

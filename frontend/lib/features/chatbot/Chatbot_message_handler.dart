@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/features/chatbot/gemini_service.dart';
 
-class ChatbotMessageHandler {
-
-  ChatbotMessageHandler({
+class ChatBotMessageHandler {
+  ChatBotMessageHandler({
     required this.controller,
     required this.geminiService,
   });
@@ -21,27 +20,18 @@ class ChatbotMessageHandler {
     _isSending = true;
     controller.clear();
 
-    final userMessage = {
-      'role': 'user',
-      'text': input,
-    };
+    final userMessage = {'role': 'user', 'text': input};
 
     try {
       final reply = await geminiService.generateReply(input);
 
-      final botMessage = {
-        'role': 'bot',
-        'text': reply,
-      };
+      final botMessage = {'role': 'bot', 'text': reply};
 
       return [userMessage, botMessage];
-    } catch (e) {
+    } on Exception {
       return [
         userMessage,
-        {
-          'role': 'bot',
-          'text': '⚠️ Có lỗi xảy ra. Vui lòng thử lại sau.',
-        }
+        {'role': 'bot', 'text': '⚠️ Có lỗi xảy ra. Vui lòng thử lại sau.'},
       ];
     } finally {
       _isSending = false;

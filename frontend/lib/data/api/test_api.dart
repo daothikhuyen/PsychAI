@@ -26,7 +26,9 @@ class TestApi {
     return response;
   }
 
-  Future<Map<String, dynamic>> submitTestDass21(Map<String, dynamic> data) async {
+  Future<Map<String, dynamic>> submitTestDass21(
+    Map<String, dynamic> data,
+  ) async {
     final response = await _api.call(method: 'POST', url: '/test/', data: data);
 
     return response;

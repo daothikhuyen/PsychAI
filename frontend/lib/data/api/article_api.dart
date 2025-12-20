@@ -4,6 +4,11 @@ import 'package:frontend/routing/routes.dart';
 class ArticleApi {
   static final BaseApi _api = BaseApi(() async => authController.getToken());
 
+  Future<Map<String, dynamic>> getAll() async {
+    final response = await _api.call(method: 'GET', url: '/articles/list');
+    return response;
+  }
+
   Future<Map<String, dynamic>> getByTopicId(int topicId) async {
     final response = await _api.call(method: 'GET', url: '/articles/$topicId/list_by_topic');
     return response;
@@ -26,6 +31,21 @@ class ArticleApi {
 
   Future<Map<String, dynamic>> proposeArticle(int articleId)async {
     final response = await _api.call(method: 'GET', url: '/articles/$articleId/get_recommended_articles');
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getArticleLikeByUser()async {
+    final response = await _api.call(method: 'GET', url: '/articles/get_artitcles_like_by_user');
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getArticleSaveByUser()async {
+    final response = await _api.call(method: 'GET', url: '/articles/get_artitcles_save_by_user');
+    return response;
+  }
+
+  Future<Map<String, dynamic>> getArticleRecommenderByUser()async {
+    final response = await _api.call(method: 'GET', url: '/recommender/recommend');
     return response;
   }
 }

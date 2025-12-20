@@ -12,7 +12,11 @@ class LocalStorageHelper {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_keyUser, jsonEncode(user.toJson()));
-      await prefs.setString(_tokenKey, user.token);
+      if(user.token != null){
+        await prefs.setString(_tokenKey, user.token?? '');
+      }else{
+        throw Exception('Token không tồn tại');
+      }
     } on MissingPluginException {
       throw Exception('Lưu user thất bại: Plugin không được đăng ký');
     } on PlatformException catch (e) {

@@ -255,4 +255,82 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
             return Response({"result": propose_articles }, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
- 
+    
+    # Helper: response list article_id
+    def get_article_ids_like_by_user_helper(self, user):
+        liked_docs = (
+            db.collection('article_like')
+            .where('user_id', '==', user.uid)
+            .order_by('created_at', direction=firestore.Query.DESCENDING)
+            .stream()
+        )
+        article_ids = [doc.to_dict()['article_id'] for doc in liked_docs]
+        return article_ids
+
+    # Response for API
+    @action(detail=False, methods=['get'])
+    def get_articles_like_by_user(self, request):
+        user = request.user
+        try:
+            article_ids = self.get_article_ids_like_by_user_helper(user)  # call helper
+
+            articles = []
+            for i in range(0, len(article_ids), 10):
+                chunk = article_ids[i:i + 10]
+                doc_ids = [str(article_id) for article_id in chunk]
+                docs = db.collection('articles').where('__name__', 'in', doc_ids).stream()
+                articles.extend([serialize_doc(doc) for doc in docs])
+
+            liked_ids = set(article_ids)
+            saved_ids = set(self.get_save_article_ids(user.uid))
+
+            return Response(
+                {"result": self.attach_liked(articles, liked_ids, saved_ids)},
+                status=200
+            )
+        except Exception as e:
+            print("ERROR get_articles_like_by_user:", e)
+            return Response({"error": str(e)}, status=500)
+        
+    def get_article_ids_save_by_user_helper(self, user):
+        saved_docs = (
+            db.collection('article_save')
+            .where('user_id', '==', user.uid)
+            .order_by('created_at', direction=firestore.Query.DESCENDING)
+            .stream()
+        )
+        article_ids = [doc.to_dict()['article_id'] for doc in saved_docs]
+        return article_ids
+        
+    @action(detail=False, methods=['get'])
+    def get_artitcles_save_by_user(self, request):
+        user = request.user
+        try:
+            article_ids = self.get_article_ids_save_by_user_helper(user)
+
+            articles = []
+            for i in range(0, len(article_ids), 10):
+                chunk = article_ids[i:i + 10]
+                doc_refs = [
+                    db.collection('articles').document(str(article_id))
+                    for article_id in chunk
+                ]
+
+                docs = (
+                    db.collection('articles')
+                    .where('__name__', 'in', doc_refs)
+                    .stream()
+                )
+                articles.extend([serialize_doc(doc) for doc in docs])
+
+            liked_ids = set(article_ids)
+            saved_ids = set(self.get_save_article_ids(user.uid))
+
+            return Response(
+                {"result": self.attach_liked(articles, liked_ids, saved_ids)},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            print("ERROR get_artitcles_like_by_user:", e)
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    

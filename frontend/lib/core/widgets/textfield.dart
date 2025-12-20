@@ -4,7 +4,7 @@ import 'package:frontend/core/themes/app_colors.dart';
 class PredictTextField extends StatelessWidget {
   const PredictTextField({
     required this.hint,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.focusNode,
     super.key,
     this.suffixIcon,
@@ -15,9 +15,10 @@ class PredictTextField extends StatelessWidget {
     this.color = AppColors.greyscale0,
     this.border = 30,
     this.size,
+    this.fillColor = Colors.transparent,
   });
   final String hint;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final Widget? suffixIcon;
   final TextInputType keyboardType;
   final bool obscureText;
@@ -27,6 +28,7 @@ class PredictTextField extends StatelessWidget {
   final Color? color;
   final double border;
   final double? size;
+  final Color? fillColor;
 
   InputDecoration _buildDecoration() {
     return InputDecoration(
@@ -36,14 +38,11 @@ class PredictTextField extends StatelessWidget {
         fontSize: 16,
         fontWeight: FontWeight.w600,
       ),
-
-      prefixIcon: Icon(prefixIcon, color: color, size: 22),
-
+      prefixIcon:
+          prefixIcon == null ? null : Icon(prefixIcon, color: color, size: 22),
       suffixIcon: suffixIcon,
-
       filled: true,
-      fillColor: Colors.transparent,
-
+      fillColor: fillColor,
       contentPadding: EdgeInsets.symmetric(
         vertical: size ?? 18,
         horizontal: size ?? 25,
@@ -52,20 +51,31 @@ class PredictTextField extends StatelessWidget {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(border),
         borderSide: BorderSide(
-          color: color ?? AppColors.greyscale0,
+          color:
+              fillColor != null && fillColor != Colors.transparent
+                  ? Colors.transparent
+                  : (color ?? AppColors.greyscale0),
           width: 1.5,
         ),
       ),
 
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(border),
-        borderSide: BorderSide(color: color ?? AppColors.greyscale0),
+        borderSide: BorderSide(
+          color:
+              fillColor != null && fillColor != Colors.transparent
+                  ? Colors.transparent
+                  : (color ?? AppColors.greyscale0),
+        ),
       ),
 
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(border),
         borderSide: BorderSide(
-          color: color ?? const Color.fromARGB(255, 176, 217, 230),
+          color:
+              fillColor != null && fillColor != Colors.transparent
+                  ? Colors.transparent
+                  : (color ?? const Color.fromARGB(255, 176, 217, 230)),
           width: 1.01,
         ),
       ),

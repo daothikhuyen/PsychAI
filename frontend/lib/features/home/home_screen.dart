@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     Future.microtask(() {
-      final homeController = Provider.of<HomeController>(context, listen: false)
+      final _ = Provider.of<HomeController>(context, listen: false)
         ..getPredictions(context);
     });
   }
@@ -36,8 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final homeController = Provider.of<HomeController>(context);
-    final authController = Provider.of<AuthController>(context, listen: false);
-    final user = authController.currentUser;
+    final controller = Provider.of<AuthController>(context);
+    final user = controller.currentUser;
 
     return Scaffold(
       backgroundColor: Colors.white,

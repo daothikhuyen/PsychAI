@@ -69,7 +69,7 @@ class _TopicScreenState extends State<TopicScreen> {
             child: IconButton(
               onPressed: () => context.push(PageRoutes.homePage),
               icon: const Icon(
-                Icons.home,
+                Icons.home_outlined,
                 color: AppColors.greyscale600,
                 size: 28,
               ),

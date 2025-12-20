@@ -16,12 +16,13 @@ class PsychUser {
     photoUrl: json['photo_url'],
     token: json['id_token'],
   );
+
   String uid;
   String email;
   String displayName;
   String? phoneNumber;
   String? photoUrl;
-  String token;
+  String? token;
 
   Map<String, dynamic> toJson() => {
     'uid': uid,

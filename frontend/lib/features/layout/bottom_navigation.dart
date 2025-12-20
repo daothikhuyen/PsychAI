@@ -20,7 +20,7 @@ class BottomNavigation extends StatelessWidget {
       height: 80,
       color: AppColors.primary500,
       shape: const CircularNotchedRectangle(),
-      notchMargin: 12,
+      notchMargin: 6,
       child: NavigationBarTheme(
         data: NavigationBarThemeData(
           labelTextStyle: WidgetStateTextStyle.resolveWith((states) {

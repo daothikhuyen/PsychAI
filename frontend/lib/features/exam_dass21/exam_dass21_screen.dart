@@ -18,7 +18,7 @@ class _Dass21TestScreenState extends State<Dass21TestScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      final controller = Provider.of<TestDass21Controller>(
+      final _ = Provider.of<TestDass21Controller>(
         context,
         listen: false,
       )..getQuesAns(context);

@@ -10,11 +10,14 @@ class PageRoutes {
   static const String examDass21 = '/examDass21';
   static const String finalResult = '/finalResult';
   static const String seeAllPage = '/seeAll';
-  static const String profile = '/profile';
   static const String personalInfo = '/personalInfo';
   static const String search = '/search';
   static const String chat = '/chat';
   static const String articles = '/articles';
   static const String listArticles = '/listArticles';
   static const String detailArticle = '/detailArticle';
+  static const String profile = '/profile';
+  static const String feedback = '/feedback';
+  static const String updateProfile = '/update';
+  static const String tabSaveAndLike = '/tabSaveAndLike';
 }

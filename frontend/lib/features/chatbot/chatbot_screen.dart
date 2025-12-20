@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:frontend/core/constants.dart';
-import 'package:frontend/features/chatbot/ChatbotMessageHandler.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:frontend/core/themes/app_colors.dart';
+import 'package:frontend/features/chatbot/Chatbot_message_handler.dart';
+import 'package:frontend/features/chatbot/controller/chatbox_controller.dart';
 import 'package:frontend/features/chatbot/gemini_service.dart';
+import 'package:frontend/routing/page_routes.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ChatBotScreen extends StatefulWidget {
@@ -12,24 +18,34 @@ class ChatBotScreen extends StatefulWidget {
 }
 
 class _ChatBotScreenState extends State<ChatBotScreen> {
-  final String apiKey = 'AIzaSyBwEU7M2Je3tTZmZC9U9Lfo7u_aqFtHNZI';
-
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, String>> _messages = [];
   bool _isLoading = false;
   late GeminiService _gemini;
-  late ChatbotMessageHandler messageHandler;
+  late ChatBotMessageHandler messageHandler;
 
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
+    _initGemini(); // Gọi hàm async riêng
+  }
+
+  Future<void> _initGemini() async {
+    final apiKey = await ChatboxController().loadApiKey();
     _gemini = GeminiService(apiKey);
-    messageHandler = ChatbotMessageHandler(
+    messageHandler = ChatBotMessageHandler(
       controller: _controller,
       geminiService: _gemini,
     );
+    setState(() {});
+  }
+
+  Future<String> loadApiKey() async {
+    final configString = await rootBundle.loadString('assets/config.json');
+    final Map<String, dynamic> config = json.decode(configString);
+    return config['API_KEY'];
   }
 
   Future<void> _sendMessage() async {
@@ -51,7 +67,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     }
   }
 
-
   void _scrollToEnd() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
@@ -61,7 +76,6 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
       );
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -75,32 +89,31 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
             textStyle: const TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.w600,
-              color: primaryColor,
+              color: AppColors.greyscale600,
             ),
           ),
         ),
         centerTitle: true,
-        toolbarHeight:60,
+        toolbarHeight: 60,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back_ios),
           iconSize: 26,
-          color: primaryColor,
-          onPressed: () => Navigator.pop(context),
+          color: AppColors.greyscale700,
+          onPressed: () => context.go(PageRoutes.homePage),
         ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: IconButton(
-              onPressed: (){},
+              onPressed: () {},
               icon: Image.asset(
-                'assets/images/chat4.gif', 
+                'assets/images/chat4.gif',
                 height: 100,
                 width: 100,
               ),
             ),
           ),
         ],
-        
       ),
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
@@ -108,8 +121,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 255, 255, 255), 
-              Color.fromARGB(255, 255, 255, 255)
+              Color.fromARGB(255, 255, 255, 255),
+              Color.fromARGB(255, 255, 255, 255),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -132,17 +145,15 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   return Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment:
-                        isUser ? 
-                        MainAxisAlignment.end : 
-                        MainAxisAlignment.start,
+                        isUser
+                            ? MainAxisAlignment.end
+                            : MainAxisAlignment.start,
                     children: [
                       if (!isUser)
                         const CircleAvatar(
                           radius: 18,
                           backgroundColor: Color.fromARGB(255, 166, 228, 222),
-                          child: Icon(
-                            Icons.smart_toy, color: Colors.white,
-                          ),
+                          child: Icon(Icons.smart_toy, color: Colors.white),
                         ),
 
                       const SizedBox(width: 8),
@@ -152,24 +163,26 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                           margin: const EdgeInsets.symmetric(vertical: 6),
                           padding: const EdgeInsets.all(14),
                           decoration: BoxDecoration(
-                           gradient: LinearGradient(
-                          colors:
-                              isUser
-                                  ? [
-                                    Colors.teal.shade300,
-                                    const Color.fromARGB(255, 86, 171, 205),
-                                  ]
-                                  : [Colors.grey.shade200, Colors.white],
-                        ),
+                            gradient: LinearGradient(
+                              colors:
+                                  isUser
+                                      ? [
+                                        Colors.teal.shade300,
+                                        const Color.fromARGB(255, 86, 171, 205),
+                                      ]
+                                      : [Colors.grey.shade200, Colors.white],
+                            ),
                             borderRadius: BorderRadius.only(
                               topLeft: const Radius.circular(20),
                               topRight: const Radius.circular(20),
-                              bottomLeft: isUser
-                                  ? const Radius.circular(20)
-                                  : const Radius.circular(4),
-                              bottomRight: isUser
-                                  ? const Radius.circular(4)
-                                  : const Radius.circular(20),
+                              bottomLeft:
+                                  isUser
+                                      ? const Radius.circular(20)
+                                      : const Radius.circular(4),
+                              bottomRight:
+                                  isUser
+                                      ? const Radius.circular(4)
+                                      : const Radius.circular(20),
                             ),
                             boxShadow: [
                               BoxShadow(
@@ -180,19 +193,19 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                               ),
                             ],
                           ),
-                          child: isUser
-                              ? Text(
-                                  message['text'] ?? '',
-                                  style: GoogleFonts.poppins(
-                                    fontSize: 16,
-                                    height: 1.5,
-                                    color: Colors.white,
+                          child:
+                              isUser
+                                  ? Text(
+                                    message['text'] ?? '',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 16,
+                                      height: 1.5,
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                  : buildAiMessage(
+                                    (message['text'] ?? '').replaceAll('*', ''),
                                   ),
-                                )
-                              : buildAiMessage(
-                                (message['text'] ?? '').replaceAll('*', ''),
-                              ),
-
                         ),
                       ),
 
@@ -218,15 +231,15 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [Colors.white, Color(0xFFE0F7FA)],
+                  colors: [Colors.white, Colors.white],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 6,
-                    offset: Offset(0, -2),
+                    color: AppColors.greyscale25,
+                    blurRadius: 20,
+                    offset: Offset(0, -18),
                   ),
                 ],
               ),
@@ -253,9 +266,7 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                   ),
                   const SizedBox(width: 8),
                   Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(shape: BoxShape.circle),
                     child: CircleAvatar(
                       radius: 28,
                       backgroundColor: const Color.fromARGB(255, 86, 171, 205),
@@ -268,12 +279,13 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
                 ],
               ),
             ),
+            const SizedBox(height: 24),
           ],
         ),
       ),
     );
   }
-  
+
   Map<String, String> getAiTopic(String message) {
     final text = message.toLowerCase();
 
@@ -306,9 +318,8 @@ class _ChatBotScreenState extends State<ChatBotScreen> {
     return {'icon': '🤖', 'title': 'Trả lời'};
   }
 
-
   Widget buildAiMessage(String text) {
-  final topic = getAiTopic(text);
+    final topic = getAiTopic(text);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

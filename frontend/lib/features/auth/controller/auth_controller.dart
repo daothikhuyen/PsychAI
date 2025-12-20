@@ -1,11 +1,11 @@
 import 'package:flutter/widgets.dart';
 import 'package:frontend/core/exception/api_exception.dart';
+import 'package:frontend/core/uitls/format.dart';
 import 'package:frontend/core/widgets/alter/loading_overlay.dart';
 import 'package:frontend/core/widgets/alter/snack_bar.dart';
 import 'package:frontend/data/api/auth_api.dart';
 import 'package:frontend/data/model/user.dart';
 import 'package:frontend/features/auth/helper/local_storage_helper.dart';
-import 'package:frontend/features/auth/utils/validators.dart';
 import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +21,6 @@ class AuthController extends ChangeNotifier {
   }
 
   final AuthApi service = AuthApi();
-  final formKey = GlobalKey<FormState>();
   final name = TextEditingController();
   final email = TextEditingController();
   final password = TextEditingController();
@@ -74,7 +73,10 @@ class AuthController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signIn(BuildContext context) async {
+  Future<void> signIn(
+    BuildContext context,
+    GlobalKey<FormState> formKey,
+  ) async {
     if (!validateForm(formKey)) return;
 
     final overlay = LoadingOverlay()..showLoading(context);
@@ -104,7 +106,7 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> signUp(BuildContext context) async {
+  Future<void> signUp(BuildContext context,GlobalKey<FormState> formKey) async {
     if (!validateForm(formKey)) return;
 
     final overlay = LoadingOverlay()..showLoading(context);
