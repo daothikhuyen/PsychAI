@@ -35,12 +35,12 @@ class ArticleApi {
   }
 
   Future<Map<String, dynamic>> getArticleLikeByUser()async {
-    final response = await _api.call(method: 'GET', url: '/articles/get_artitcles_like_by_user');
+    final response = await _api.call(method: 'GET', url: '/articles/get_articles_like_by_user');
     return response;
   }
 
   Future<Map<String, dynamic>> getArticleSaveByUser()async {
-    final response = await _api.call(method: 'GET', url: '/articles/get_artitcles_save_by_user');
+    final response = await _api.call(method: 'GET', url: '/articles/get_articles_save_by_user');
     return response;
   }
 

@@ -286,11 +286,11 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
 
             return Response(
                 {"result": self.attach_liked(articles, liked_ids, saved_ids)},
-                status=200
+                status=status.HTTP_200_OK
             )
         except Exception as e:
             print("ERROR get_articles_like_by_user:", e)
-            return Response({"error": str(e)}, status=500)
+            return Response({"error": str(e)},  status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
     def get_article_ids_save_by_user_helper(self, user):
         saved_docs = (
@@ -303,7 +303,7 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
         return article_ids
         
     @action(detail=False, methods=['get'])
-    def get_artitcles_save_by_user(self, request):
+    def get_articles_save_by_user(self, request):
         user = request.user
         try:
             article_ids = self.get_article_ids_save_by_user_helper(user)
