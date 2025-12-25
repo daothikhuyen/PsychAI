@@ -6,8 +6,13 @@ import 'package:frontend/features/exam_dass21/controller/exam_dass21_controller.
 import 'package:provider/provider.dart';
 
 class Dass21TestScreen extends StatefulWidget {
-  const Dass21TestScreen({required this.predictionId, super.key});
+  const Dass21TestScreen({
+    required this.predictionId,
+    super.key,
+    this.finalEmotion,
+  });
   final String predictionId;
+  final String? finalEmotion;
 
   @override
   State<Dass21TestScreen> createState() => _Dass21TestScreenState();
@@ -18,10 +23,8 @@ class _Dass21TestScreenState extends State<Dass21TestScreen> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      final _ = Provider.of<TestDass21Controller>(
-        context,
-        listen: false,
-      )..getQuesAns(context);
+      final _ = Provider.of<TestDass21Controller>(context, listen: false)
+        ..getQuesAns(context);
     });
   }
 
@@ -84,7 +87,7 @@ class _Dass21TestScreenState extends State<Dass21TestScreen> {
                       value: answer.score,
                       groupValue: controller.selectedAnswers[question.order],
                       onChanged: (value) {
-                        controller.addAnswer(question.order, value??0);
+                        controller.addAnswer(question.order, value ?? 0);
                       },
 
                       activeColor: const Color(0xFF3B5B84),
@@ -102,7 +105,7 @@ class _Dass21TestScreenState extends State<Dass21TestScreen> {
         padding: const EdgeInsets.all(16),
         child: ElevatedButton(
           onPressed: () {
-            controller.sendDass21ResultToServer(context, widget.predictionId);
+            controller.sendDass21ResultToServer(context, widget.predictionId, widget.finalEmotion ?? '');
           },
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF3B5B84),

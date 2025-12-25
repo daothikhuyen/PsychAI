@@ -40,13 +40,14 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
 
     def save_face_emotions(self, email, user_id, emotions_data):
         try:
+            print('')
             emotion_weight = defaultdict(float)
             for e in emotions_data:
                 emotion_weight[e['emotion']] += e['confidence_score']
 
             #Get the label with the highest total confidence
             final_emotion = max(emotion_weight, key=emotion_weight.get) if emotion_weight else "unknown"
-
+            
             predict_info = {
                 "user_id": user_id,
                 "email": email,
@@ -177,7 +178,9 @@ class PredictAIViewSet(viewsets.GenericViewSet,viewsets.ViewSet):
         user = request.user
         try:
             col_ref = db.collection('predictions')
-            docs = col_ref.where('user_id', '==', user.uid).stream()
+            docs = col_ref.where('user_id', '==', user.uid)\
+            .order_by('created_at', direction=firestore.Query.ASCENDING)\
+            .stream()
 
             results = [serialize_doc(doc) for doc in docs]
 

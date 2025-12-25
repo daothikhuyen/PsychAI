@@ -84,11 +84,18 @@ final goRouter = GoRouter(
     GoRoute(
       path: PageRoutes.examDass21,
       pageBuilder: (context, state) {
-        final predictionId = state.extra! as String;
+        final extra = state.extra! as Map<String, dynamic>;
+
+        final predictionId = extra['id'] as String;
+        final finalEmotion = extra['final_emotion'] as String;
+
         return animationRouter(
           ChangeNotifierProvider(
             create: (context) => TestDass21Controller(),
-            child: Dass21TestScreen(predictionId: predictionId),
+            child: Dass21TestScreen(
+              predictionId: predictionId,
+              finalEmotion: finalEmotion,
+            ),
           ),
           state,
         );
@@ -97,16 +104,24 @@ final goRouter = GoRouter(
     GoRoute(
       path: PageRoutes.finalResult,
       pageBuilder: (context, state) {
-        final result = state.extra! as Map<String, dynamic>;
+        final extra = state.extra as Map<String, dynamic>?;
+
+        final response = extra?['response'];
+        final finalEmotion = extra?['final_emotion'] as String?;
+
         return animationRouter(
           ChangeNotifierProvider(
             create: (context) => TestDass21Controller(),
-            child: ExamConclusionScreen(result: result),
+            child: ExamConclusionScreen(
+              result: response,
+              finalEmotion: finalEmotion??'Chứa xác định',
+            ),
           ),
           state,
         );
       },
     ),
+
     GoRoute(
       path: PageRoutes.listArticles,
       pageBuilder: (context, state) {

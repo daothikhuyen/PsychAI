@@ -7,9 +7,14 @@ import 'package:frontend/routing/page_routes.dart';
 import 'package:go_router/go_router.dart';
 
 class ExamConclusionScreen extends StatelessWidget {
-  const ExamConclusionScreen({required this.result, super.key});
+  const ExamConclusionScreen({
+    required this.result,
+    required this.finalEmotion,
+    super.key,
+  });
 
   final Map<String, dynamic> result;
+  final String finalEmotion;
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +52,23 @@ class ExamConclusionScreen extends StatelessWidget {
                 const SizedBox(height: 10),
 
                 // Cảm xúc dự đoán
-                const Row(
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
+                    const Text(
                       'Cảm xúc dự đoán:',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 10),
+                    const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Lo lắng',
-                          style: TextStyle(
+                          finalEmotion,
+                          style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.normal,
                           ),
@@ -143,7 +148,7 @@ class ExamConclusionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // infomation for doctor 
+                // infomation for doctor
                 const InfoDoctor(),
               ],
             ),

@@ -16,7 +16,6 @@ class TestDass21Controller extends ChangeNotifier {
   Map<int, int?> selectedAnswers = {};
   bool isLoading = false;
 
-
   Future<void> getQuesAns(BuildContext context) async {
     final overlay = LoadingOverlay()..showLoading(context);
     try {
@@ -55,6 +54,7 @@ class TestDass21Controller extends ChangeNotifier {
   Future<void> sendDass21ResultToServer(
     BuildContext context,
     String predictionId,
+    String finalEmotion,
   ) async {
     if (answerDass21.length < 21) {
       PredictSnackBar().showSnackBar(
@@ -65,9 +65,10 @@ class TestDass21Controller extends ChangeNotifier {
       try {
         final data = {'prediction_id': predictionId, 'answers': answerDass21};
         final response = await service.submitTestDass21(data);
+
         context.go(
           PageRoutes.finalResult,
-          extra: response, // ← truyền map kết quả
+          extra: {'response': response, 'final_emotion': finalEmotion},
         );
       } on ApiException catch (e) {
         PredictSnackBar().showSnackBar(context, e.toString());

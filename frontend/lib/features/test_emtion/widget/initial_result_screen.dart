@@ -70,7 +70,11 @@ class InitialResultScreen extends StatelessWidget {
           onPressed:
               () => context.go(
                 PageRoutes.examDass21,
-                extra: predictionResult?.id??'',
+                extra: {
+                  'id': predictionResult?.id ?? '',
+                  'final_emotion':
+                      predictionResult?.finalEmotion ?? 'Chưa xác định',
+                },
               ),
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF3B5B84),
