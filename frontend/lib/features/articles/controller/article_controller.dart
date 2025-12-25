@@ -135,6 +135,9 @@ class ArticleController extends ChangeNotifier {
 
   Future<void> getSavedAndLikedArticles(BuildContext context) async {
     try {
+      isLoading = true;
+      notifyListeners();
+
       final response = await service.getArticleLikeByUser();
       final resultList = response['result'] as List;
       listLikedArticles = resultList.map((e) => Article.fromJson(e)).toList();
@@ -142,6 +145,7 @@ class ArticleController extends ChangeNotifier {
       final response2 = await service.getArticleSaveByUser();
       final resultList2 = response2['result'] as List;
       listSavedArticles = resultList2.map((e) => Article.fromJson(e)).toList();
+      isLoading = false;
       notifyListeners();
     } on ApiException catch (e) {
       PredictSnackBar().showSnackBar(context, e.toString());
@@ -152,13 +156,16 @@ class ArticleController extends ChangeNotifier {
     try {
       final response = await service.getArticleRecommenderByUser();
       final resultList = response['recommendations'] as List;
+
       if (resultList.isEmpty) {
         final response = await service.getAll();
         final allList = response['result'] as List;
         final top3List = allList.take(3).toList();
+        
         listRecommender = top3List.map((e) => Article.fromJson(e)).toList();
+      }else{
+        listRecommender = resultList.map((e) => Article.fromJson(e)).toList();
       }
-      listRecommender = resultList.map((e) => Article.fromJson(e)).toList();
       notifyListeners();
     } on ApiException catch (e) {
       PredictSnackBar().showSnackBar(context, e.toString());

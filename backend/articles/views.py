@@ -16,8 +16,12 @@ class ArticlesView(viewsets.GenericViewSet,viewsets.ViewSet):
     def list(self,request):
         user = request.user
         try:
-            doc_ref = db.collection('articles').get()
+            doc_ref = db.collection('articles').limit(3).get()
             articles = [serialize_doc(doc) for doc in doc_ref]
+
+            liked_ids = self.get_like_article_ids(user.uid)
+            saved_ids = self.get_save_article_ids(user.uid)
+            articles = self.attach_liked(articles, liked_ids, saved_ids)
             return Response({"result": articles}, status=status.HTTP_200_OK)
         except Exception as e:
             traceback.print_exc()

@@ -5,7 +5,7 @@ class ArticleApi {
   static final BaseApi _api = BaseApi(() async => authController.getToken());
 
   Future<Map<String, dynamic>> getAll() async {
-    final response = await _api.call(method: 'GET', url: '/articles/list');
+    final response = await _api.call(method: 'GET', url: '/articles/');
     return response;
   }
 

@@ -23,8 +23,11 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    final _ = Provider.of<ArticleController>(context, listen: false)
-    ..getSavedAndLikedArticles(context);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final _ = Provider.of<ArticleController>(context, listen: false)
+        ..getSavedAndLikedArticles(context);
+    });
   }
 
   @override
@@ -75,8 +78,14 @@ class _SavedArticlesScreenState extends State<SavedArticlesScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          ArticleLiked(recentLiked: controller.listLikedArticles),
-          ArticleGrid(list: controller.listSavedArticles),
+          ArticleGrid(
+            list: controller.listLikedArticles,
+            isLoading: controller.isLoading,
+          ),
+          ArticleGrid(
+            list: controller.listSavedArticles,
+            isLoading: controller.isLoading,
+          ),
         ],
       ),
     );
